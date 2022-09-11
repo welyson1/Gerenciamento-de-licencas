@@ -13,8 +13,8 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("../view/tela.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 400, 300));
+        primaryStage.setTitle("Controle de licenças para trabalho");
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();        
     }
 }

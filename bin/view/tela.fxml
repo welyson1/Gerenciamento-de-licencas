@@ -1,11 +1,268 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
-    <children>
-        <Label fx:id="label" text="Label" />
-    </children>
-</StackPane>
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/18" fx:controller="controller.Controller">
+  <tabs>
+    <Tab text="Recursos">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                           <children>
+                              <HBox prefHeight="50.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cadastro de recursos">
+                                       <font>
+                                          <Font name="Arial" size="24.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nome" />
+                              <TextField fx:id="entradaNome" promptText="Digite aqui..." />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+                              <TextField fx:id="entradaEmail" promptText="Digite aqui..." />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Projeto" />
+                              <TextField fx:id="entradaProjeto" promptText="Digite aqui..." />
+                              <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                 <children>
+                                    <Button fx:id="btnCadastrarRecurso" mnemonicParsing="false" onAction="#cadastrarRecurso" text="Cadastrar" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <HBox prefHeight="50.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Consulta de recursos">
+                                       <font>
+                                          <Font name="Arial" size="24.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <TextArea fx:id="txtAreaConsulta" prefHeight="149.0" prefWidth="280.0" promptText="Os resultados aparecerão aqui..." />
+                              <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                 <children>
+                                    <Button fx:id="btnConsultaRecursos" mnemonicParsing="false" onAction="#consultaRecursos" text="Consulta" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+    <Tab text="Licenças obtidas">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                           <children>
+                              <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+                                    <TextField fx:id="entradaEmailRecursoLicencaObtida" minWidth="150.0" promptText="Digite aqui..." />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Licença" />
+                                    <TextField fx:id="entradaNomeLicencaObtida" minWidth="300.0" promptText="Digite aqui..." />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Button fx:id="btnCadastroLicencaObtida" mnemonicParsing="false" onAction="#cadastroLicencaObtida" text="Cadastrar" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                           <children>
+                              <TextArea fx:id="txtAreaConsultaLicencaObtida" prefHeight="200.0" prefWidth="200.0" promptText="Os resultados aparecerão aqui..." />
+                              <HBox alignment="CENTER_RIGHT">
+                                 <children>
+                                    <Button fx:id="btnConsultaLicencaObtida" mnemonicParsing="false" onAction="#consultaLicencaObtida" text="Consultar" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+      <Tab text="Licenças necessarias">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                           <children>
+                              <HBox prefHeight="50.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cadastro de licença">
+                                       <font>
+                                          <Font name="Arial" size="24.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nome" />
+                              <TextField fx:id="entradaNomeLicencaNecessaria" promptText="Digite aqui..." />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Link" />
+                              <TextField fx:id="entrataLinkLicencaNecessaria" promptText="Digite aqui..." />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Categoria" />
+                              <TextField fx:id="entrataCategoriaLicencaNecessaria" promptText="Digite aqui..." />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Level" />
+                              <TextField fx:id="entrataLevelLicencaNecessaria" promptText="Digite aqui..." />
+                              <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                 <children>
+                                    <Button fx:id="btnCadastroLicencaNecessaria" mnemonicParsing="false" onAction="#cadastroLicencaNecessaria" text="Cadastrar" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <HBox prefHeight="50.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Consulta de licenças">
+                                       <font>
+                                          <Font name="Arial" size="24.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <TextArea fx:id="txtAreaConsultaLicencaNecessaria" prefHeight="200.0" prefWidth="280.0" promptText="Os resultados aparecerão aqui..." />
+                              <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                 <children>
+                                    <Button fx:id="btnConsultaLicencaNecessaria" mnemonicParsing="false" onAction="#consultaLicencaNecessaria" text="Consultar" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab text="Projeto">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                           <children>
+                              <HBox prefHeight="50.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cadastro de projeto">
+                                       <font>
+                                          <Font name="Arial" size="24.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nome" />
+                              <TextField fx:id="entradaNomeProjeto" promptText="Digite aqui..." />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tecnologia" />
+                              <TextField fx:id="entradaTecnologia" promptText="Digite aqui..." />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\$$$" />
+                              <TextField fx:id="entradaValor" promptText="Digite aqui..." />
+                              <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                 <children>
+                                    <Button fx:id="btnCadastrarProjeto" mnemonicParsing="false" onAction="#cadastrarProjeto" text="Cadastrar" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <HBox prefHeight="50.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Consulta de projetos">
+                                       <font>
+                                          <Font name="Arial" size="24.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <TextArea fx:id="txtAreaConsultaProjetos" prefHeight="149.0" prefWidth="280.0" promptText="Os resultados aparecerão aqui..." />
+                              <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                 <children>
+                                    <Button fx:id="btnConsultaProjetos" mnemonicParsing="false" onAction="#consultaProjetos" text="Consulta" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab text="Dashboard">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <PieChart layoutY="176.0" prefHeight="195.0" prefWidth="297.0" title="Status de conclusão de licenças" />
+                  <BarChart layoutX="314.0" layoutY="186.0" prefHeight="187.0" prefWidth="286.0" title="Recursos por projeto">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </BarChart>
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+  </tabs>
+</TabPane>
