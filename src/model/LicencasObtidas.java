@@ -1,8 +1,8 @@
 package model;
 
 public class LicencasObtidas {
+    String licencasObtidasRecursoEmail = "";
+    String licencasObtidasTreinamentoNome = "";
     String dataConclusao = "";
-    int recursoID = 0;
-    int treinamentoID = 0;
 
 }

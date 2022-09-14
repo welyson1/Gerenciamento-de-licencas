@@ -1,6 +1,7 @@
 package controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import javafx.event.ActionEvent;
@@ -9,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import model.ManipuladorArquivo;
+import model.Recurso;
 
 public class Controller {
 
@@ -63,21 +65,26 @@ public class Controller {
 
 //-------------------------------------------------------------
 
-    ManipuladorArquivo manipuladorArquivo = new ManipuladorArquivo();
-    String caminhoDataRecursos = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/Recursos.txt";
-    String caminhoDataLicencasObtidas = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/LicencasObtidas.txt";
-    String caminhoDataLicencasNecessarias = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/LicencasNecessarias.txt";
-    String caminhoDataProjetos = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/Projetos.txt";
+    ManipuladorArquivo manipuladorArquivo = new ManipuladorArquivo();    
+    
+    String caminhoDataRecursos = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/Recursos.txt";
+    String caminhoDataLicencasObtidas = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/LicencasObtidas.txt";
+    String caminhoDataLicencasNecessarias = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/LicencasNecessarias.txt";
+    String caminhoDataProjetos = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/Projetos.txt";
     
 //-------------------------------------------------------------  
 
     @FXML
-    void cadastrarRecurso(ActionEvent event) throws FileNotFoundException, IOException {        
-        String entradaInfos = 
-            entradaNome.getText() + ";" 
-            + entradaEmail.getText() + ";" 
-            + entradaProjeto.getText();
-        manipuladorArquivo.manipuladorEscrita(entradaInfos, caminhoDataRecursos);
+    void cadastrarRecurso(ActionEvent event) throws FileNotFoundException, IOException { 
+        //Instancia do recurso
+        Recurso recurso = new Recurso(entradaNome.getText(), entradaEmail.getText(), entradaProjeto.getText());
+
+        //Declaração de arrayList
+        ArrayList<Recurso> listRecursos = new ArrayList<>();
+        
+        //Adição no arrayList
+        listRecursos.add(recurso);
+        
     }
     @FXML
     void consultaRecursos(ActionEvent event) {

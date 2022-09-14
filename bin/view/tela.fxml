@@ -8,6 +8,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/18" fx:controller="controller.Controller">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
   <tabs>
     <Tab text="Recursos">
       <content>
@@ -62,7 +64,13 @@
                                     </Text>
                                  </children>
                               </HBox>
-                              <TextArea fx:id="txtAreaConsulta" prefHeight="149.0" prefWidth="280.0" promptText="Os resultados aparecerão aqui..." />
+                              <TableView fx:id="tableViewRecursos" prefHeight="200.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn fx:id="tableViewColunaNome" prefWidth="75.0" text="Nome" />
+                                  <TableColumn fx:id="tableViewColunaEmail" prefWidth="75.0" text="Email" />
+                                    <TableColumn fx:id="tableviewColunaProjeto" prefWidth="75.0" text="Projeto" />
+                                </columns>
+                              </TableView>
                               <HBox alignment="CENTER_RIGHT" spacing="10.0">
                                  <children>
                                     <Button fx:id="btnConsultaRecursos" mnemonicParsing="false" onAction="#consultaRecursos" text="Consulta" />

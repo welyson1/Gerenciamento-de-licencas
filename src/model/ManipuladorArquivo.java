@@ -17,7 +17,7 @@ public class ManipuladorArquivo {
      */
     public String[] manipuladorLeitura(String caminho) {    
         String dados = ""; 
-        String infoArrayExterno[] = null;       
+        String infoArrayExterno[] = null;      
         try {            
             BufferedReader leitor = 
                 new BufferedReader(new FileReader(new File(caminho)));
