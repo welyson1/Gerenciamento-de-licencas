@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Iterator;
+
 public class Recurso {
     String recursoNome = "";
     String recursoEmail = "";
@@ -28,5 +30,8 @@ public class Recurso {
         this.recursoNome = recursoNome;
         this.recursoEmail = recursoEmail;
         this.recursoProjeto = recursoProjeto;
+    }
+    public Iterator<Recurso> iterator() {
+        return null;
     }
 }

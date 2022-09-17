@@ -7,6 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ManipuladorArquivo {
     
@@ -17,7 +20,10 @@ public class ManipuladorArquivo {
      */
     public String[] manipuladorLeitura(String caminho) {    
         String dados = ""; 
-        String infoArrayExterno[] = null;      
+        String infoArrayExterno[] = null;
+
+        //Declaração de arrayList
+        List<Recurso> listRecursosArquivo = new ArrayList<Recurso>(); 
         try {            
             BufferedReader leitor = 
                 new BufferedReader(new FileReader(new File(caminho)));
@@ -61,6 +67,22 @@ public class ManipuladorArquivo {
      * @throws IOException
      */
     public void manipuladorEscrita(String informacoes, String caminho) throws FileNotFoundException, IOException {
+        /*
+        List<Recurso> listRecursosArquivo = new ArrayList<Recurso>();
+        StringBuffer sb = new StringBuffer();
+        Iterator<Recurso> it = listRecursosArquivo.iterator();
+        while(it.hasNext())
+        {
+            sb.append(it.next());
+            sb.append(";");
+        }
+
+        BufferedWriter bw = new BufferedWriter(new FileWriter(caminho));
+        bw.write(sb.toString());
+        bw.flush();
+        bw.close();*/
+        
+
         //Metodo 2 para armazenar dados
         BufferedWriter fileWriter = null;
         try {

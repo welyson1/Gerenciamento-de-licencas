@@ -1,18 +1,27 @@
 package controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import model.ManipuladorArquivo;
 import model.Recurso;
 
-public class Controller {
+public class Controller implements Initializable{
 
     @FXML
     private Button btnCadastrarProjeto;
@@ -63,9 +72,18 @@ public class Controller {
     @FXML
     private TextArea txtAreaConsultaProjetos;
 
+    @FXML
+    private TableColumn<Recurso, String> tableViewColunaEmail;
+    @FXML
+    private TableColumn<Recurso, String> tableViewColunaNome;
+    @FXML
+    private TableView<Recurso> tableViewRecursos;
+    @FXML
+    private TableColumn<Recurso, String> tableviewColunaProjeto;
+
 //-------------------------------------------------------------
 
-    ManipuladorArquivo manipuladorArquivo = new ManipuladorArquivo();    
+    ManipuladorArquivo manipuladorArquivo = new ManipuladorArquivo();   
     
     String caminhoDataRecursos = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/Recursos.txt";
     String caminhoDataLicencasObtidas = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/LicencasObtidas.txt";
@@ -74,18 +92,65 @@ public class Controller {
     
 //-------------------------------------------------------------  
 
-    @FXML
-    void cadastrarRecurso(ActionEvent event) throws FileNotFoundException, IOException { 
-        //Instancia do recurso
-        Recurso recurso = new Recurso(entradaNome.getText(), entradaEmail.getText(), entradaProjeto.getText());
+    //Declaração de arrayList
+    private List<Recurso> listRecursos = new ArrayList<Recurso>();
 
-        //Declaração de arrayList
-        ArrayList<Recurso> listRecursos = new ArrayList<>();
+    //Declaração do observador
+    private ObservableList<Recurso> observableList;
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb){
         
-        //Adição no arrayList
-        listRecursos.add(recurso);
+        //Observador de seleção do item na lista
+        tableViewRecursos.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> recursoSelecionado(newValue));        
         
     }
+
+    @FXML
+    void cadastrarRecurso(ActionEvent event) throws FileNotFoundException, IOException { 
+        //Associação das variaveis da classe com as probliedades da tabela
+        tableViewColunaNome.setCellValueFactory(new PropertyValueFactory<>("recursoNome"));
+        tableViewColunaEmail.setCellValueFactory(new PropertyValueFactory<>("recursoEmail"));
+        tableviewColunaProjeto.setCellValueFactory(new PropertyValueFactory<>("recursoProjeto"));
+
+        //Instancia do recurso
+        Recurso recurso = new Recurso(entradaNome.getText(), entradaEmail.getText(), entradaProjeto.getText());
+ 
+        //Adição no arrayList
+        listRecursos.add(recurso);
+
+        //Ação do observador
+        observableList = FXCollections.observableArrayList(listRecursos);
+        tableViewRecursos.setItems(observableList);
+
+        String entradaInfos = 
+            recurso.getRecursoNome() + ";"
+            + recurso.getRecursoEmail() + ";" 
+            + recurso.getRecursoProjeto();
+
+        manipuladorArquivo.manipuladorEscrita(entradaInfos, caminhoDataRecursos);
+
+    }
+
+    //Metodo de log para saber a seleção do cliente
+    public void recursoSelecionado(Recurso recurso) {
+        System.out.println("Seleção: " + recurso.getRecursoNome());
+    }
+
+    @FXML
+    public void excluirRecurso() {
+        //Passando o item selecionado para variavel
+        Recurso recursoRemover = tableViewRecursos.getSelectionModel().getSelectedItem();
+        //Log
+        System.out.println("Recurso removido" + recursoRemover.getRecursoNome());
+        //Remoção do recurso
+        tableViewRecursos.getItems().remove(recursoRemover);
+        //Remoção do ArrayList
+        listRecursos.remove(recursoRemover);
+
+    }
+    
     @FXML
     void consultaRecursos(ActionEvent event) {
         //Declaração do array para guardar as informações
@@ -113,7 +178,7 @@ public class Controller {
             
             //Perfumaria
             txtAreaConsulta.appendText("\n");
-            txtAreaConsulta.appendText("----------------");          
+            txtAreaConsulta.appendText("----------------");         
         }
     }
     
@@ -125,7 +190,7 @@ public class Controller {
             entradaNomeProjeto.getText() + ";"
             + entradaTecnologia.getText() + ";" 
             + entradaValor.getText();
-        manipuladorArquivo.manipuladorEscrita(entradaInfos, caminhoDataProjetos);
+        //manipuladorArquivo.manipuladorEscrita(entradaInfos, caminhoDataProjetos);
     }
     @FXML
     void consultaProjetos(ActionEvent event) {
@@ -151,7 +216,7 @@ public class Controller {
             + entrataLinkLicencaNecessaria.getText() + ";" 
             + entrataCategoriaLicencaNecessaria.getText() + ";" 
             + entrataLevelLicencaNecessaria.getText();
-        manipuladorArquivo.manipuladorEscrita(entradaInfos, caminhoDataLicencasNecessarias);
+        //manipuladorArquivo.manipuladorEscrita(entradaInfos, caminhoDataLicencasNecessarias);
     }
     @FXML
     void consultaLicencaNecessaria(ActionEvent event) {
@@ -176,7 +241,7 @@ public class Controller {
             entradaEmailRecursoLicencaObtida.getText() + ";" 
             + entradaNomeLicencaObtida.getText();
 
-        manipuladorArquivo.manipuladorEscrita(entradaInfos, caminhoDataLicencasObtidas);
+        //manipuladorArquivo.manipuladorEscrita(entradaInfos, caminhoDataLicencasObtidas);
     }
     @FXML
     void consultaLicencaObtida(ActionEvent event) {
@@ -192,5 +257,6 @@ public class Controller {
             txtAreaConsultaLicencaObtida.appendText("----------------");          
         }
     } 
-     
+    
+
 }
