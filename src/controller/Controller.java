@@ -84,11 +84,16 @@ public class Controller implements Initializable{
 //-------------------------------------------------------------
 
     ManipuladorArquivo manipuladorArquivo = new ManipuladorArquivo();   
-    
+    /*
     String caminhoDataRecursos = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/Recursos.txt";
     String caminhoDataLicencasObtidas = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/LicencasObtidas.txt";
     String caminhoDataLicencasNecessarias = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/LicencasNecessarias.txt";
-    String caminhoDataProjetos = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/Projetos.txt";
+    String caminhoDataProjetos = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/Projetos.txt";*/
+
+    String caminhoDataRecursos = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/Recursos.txt";
+    String caminhoDataLicencasObtidas = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/LicencasObtidas.txt";
+    String caminhoDataLicencasNecessarias = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/LicencasNecessarias.txt";
+    String caminhoDataProjetos = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/Projetos.txt";
     
 //-------------------------------------------------------------  
 
@@ -104,42 +109,33 @@ public class Controller implements Initializable{
         //Observador de seleção do item na lista
         tableViewRecursos.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> recursoSelecionado(newValue));        
-        
+        carregarRecursoNaLista();
     }
-
+//-------------------------------------------------------------    
     @FXML
-    void cadastrarRecurso(ActionEvent event) throws FileNotFoundException, IOException { 
-        //Associação das variaveis da classe com as probliedades da tabela
-        tableViewColunaNome.setCellValueFactory(new PropertyValueFactory<>("recursoNome"));
-        tableViewColunaEmail.setCellValueFactory(new PropertyValueFactory<>("recursoEmail"));
-        tableviewColunaProjeto.setCellValueFactory(new PropertyValueFactory<>("recursoProjeto"));
-
+    void cadastrarRecurso(ActionEvent event) throws FileNotFoundException, IOException {         
         //Instancia do recurso
         Recurso recurso = new Recurso(entradaNome.getText(), entradaEmail.getText(), entradaProjeto.getText());
  
         //Adição no arrayList
         listRecursos.add(recurso);
+        coisasDaLista();
 
-        //Ação do observador
-        observableList = FXCollections.observableArrayList(listRecursos);
-        tableViewRecursos.setItems(observableList);
-
-        String entradaInfos = 
-            recurso.getRecursoNome() + ";"
-            + recurso.getRecursoEmail() + ";" 
-            + recurso.getRecursoProjeto();
-
-        manipuladorArquivo.manipuladorEscrita(entradaInfos, caminhoDataRecursos);
-
+        //Salvar no arquivo de texto a cada cadastro
+        manipuladorArquivo.manipuladorEscrita(listRecursos, caminhoDataRecursos);     
     }
-
+    //Metodo salva em um arquivo txt ao ser acionado
+    @FXML
+    void salvarNoAquivo(ActionEvent event) throws FileNotFoundException, IOException {
+        manipuladorArquivo.manipuladorEscrita(listRecursos, caminhoDataRecursos);
+    }
     //Metodo de log para saber a seleção do cliente
     public void recursoSelecionado(Recurso recurso) {
         System.out.println("Seleção: " + recurso.getRecursoNome());
     }
-
+    //Metodo exclui o item e salva em um arquivo .txt
     @FXML
-    public void excluirRecurso() {
+    public void excluirRecurso() throws FileNotFoundException, IOException {
         //Passando o item selecionado para variavel
         Recurso recursoRemover = tableViewRecursos.getSelectionModel().getSelectedItem();
         //Log
@@ -148,37 +144,42 @@ public class Controller implements Initializable{
         tableViewRecursos.getItems().remove(recursoRemover);
         //Remoção do ArrayList
         listRecursos.remove(recursoRemover);
-
+        //Atualização da lista no arquivo
+        manipuladorArquivo.manipuladorEscrita(listRecursos, caminhoDataRecursos);   
     }
-    
-    @FXML
-    void consultaRecursos(ActionEvent event) {
+    //Metodo que faz coisas da tableView
+    public void coisasDaLista() {
+        //Associação das variaveis da classe com as probliedades da tabela 
+        tableViewColunaNome.setCellValueFactory(new PropertyValueFactory<>("recursoNome"));
+        tableViewColunaEmail.setCellValueFactory(new PropertyValueFactory<>("recursoEmail"));
+        tableviewColunaProjeto.setCellValueFactory(new PropertyValueFactory<>("recursoProjeto"));           
+        
+        observableList = FXCollections.observableArrayList(listRecursos);
+
+        tableViewRecursos.setItems(observableList); 
+    }
+    //Fazer um metodo que carrega os itens do .txt para a lista assim que abrir o software
+    public void carregarRecursoNaLista() {
+        //Declaração da lista provisoria para armazenar as strings brutas concatenadas
+        List<String> listRecursosArquivo = new ArrayList<String>(); 
+        //Retorno do metodo de leitura  
+        listRecursosArquivo = manipuladorArquivo.manipuladorLeitura(caminhoDataRecursos);
+
         //Declaração do array para guardar as informações
-        String infoArrayExterno[] = null;  
+        for (String item : listRecursosArquivo) {
+            Recurso recurso = new Recurso(null,null,null);
 
-        //Atribuição da saida do medodo manipuladorLeitura para o array
-        infoArrayExterno = manipuladorArquivo.manipuladorLeitura(caminhoDataRecursos);
+            StringTokenizer Linguicao = new StringTokenizer(item, ";");
 
-        /*
-         * Corre o array pegando a linha e separando no delimitador
-         * Exemplo: welyson;welyson@gmail.com;CALRO RAN
-         * Para:
-         *  welyson
-         *  welyson@gmail.com
-         *  CLARO RAN
-         * Depois exibie no textArea
-         */
-        for (String item : infoArrayExterno) {
-
-            StringTokenizer Linguicao = 
-                new StringTokenizer(item, ";");
-            while (Linguicao.hasMoreTokens()){ //Executa enquanto tiver Tokens
-                txtAreaConsulta.appendText("\n" + Linguicao.nextToken()); //Acrescenta no textArea
+            while (Linguicao.hasMoreTokens()){ //Executa enquanto tiver Tokens                
+                recurso.setRecursoNome(Linguicao.nextToken());
+                recurso.setRecursoEmail(Linguicao.nextToken());
+                recurso.setRecursoProjeto(Linguicao.nextToken());                
             } 
             
-            //Perfumaria
-            txtAreaConsulta.appendText("\n");
-            txtAreaConsulta.appendText("----------------");         
+            listRecursos.add(recurso);
+
+            coisasDaLista();
         }
     }
     
@@ -195,7 +196,7 @@ public class Controller implements Initializable{
     @FXML
     void consultaProjetos(ActionEvent event) {
         String infoArrayExterno[] = null;    
-        infoArrayExterno = manipuladorArquivo.manipuladorLeitura(caminhoDataProjetos);
+        //infoArrayExterno = manipuladorArquivo.manipuladorLeitura(caminhoDataProjetos);
         for (String item : infoArrayExterno) {            
             StringTokenizer Linguicao = 
                 new StringTokenizer(item, ";");
@@ -221,7 +222,7 @@ public class Controller implements Initializable{
     @FXML
     void consultaLicencaNecessaria(ActionEvent event) {
         String infoArrayExterno[] = null;    
-        infoArrayExterno = manipuladorArquivo.manipuladorLeitura(caminhoDataLicencasNecessarias);
+        //infoArrayExterno = manipuladorArquivo.manipuladorLeitura(caminhoDataLicencasNecessarias);
         for (String item : infoArrayExterno) {            
             StringTokenizer Linguicao = 
                 new StringTokenizer(item, ";");
@@ -246,7 +247,7 @@ public class Controller implements Initializable{
     @FXML
     void consultaLicencaObtida(ActionEvent event) {
         String infoArrayExterno[] = null;    
-        infoArrayExterno = manipuladorArquivo.manipuladorLeitura(caminhoDataLicencasObtidas);
+        //infoArrayExterno = manipuladorArquivo.manipuladorLeitura(caminhoDataLicencasObtidas);
         for (String item : infoArrayExterno) {            
             StringTokenizer Linguicao = 
                 new StringTokenizer(item, ";");

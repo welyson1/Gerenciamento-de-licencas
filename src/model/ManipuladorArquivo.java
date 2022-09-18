@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ManipuladorArquivo {
@@ -18,44 +17,26 @@ public class ManipuladorArquivo {
      * @param caminho
      * @return vetor com a informações concatenadas
      */
-    public String[] manipuladorLeitura(String caminho) {    
-        String dados = ""; 
-        String infoArrayExterno[] = null;
+    public List<String> manipuladorLeitura(String caminho) {  
+        
+        List<String> listArquivo = new ArrayList<String>();     
+        try {  
 
-        //Declaração de arrayList
-        List<Recurso> listRecursosArquivo = new ArrayList<Recurso>(); 
-        try {            
             BufferedReader leitor = 
                 new BufferedReader(new FileReader(new File(caminho)));
             
-            //Gambiarra para contar as linhas com dados para então colocar no vetor
-            BufferedReader leitor2 = 
-                new BufferedReader(new FileReader(new File(caminho)));
-            
-            int contador = 0;
-            while (leitor2.readLine() != null) contador++;
-            leitor2.close();
-            //Fim da gambiarra
-
-            String infoArray[] = new String[contador];
-            int i = 0;
             while (leitor.ready()) {
-                dados = leitor.readLine();
-                infoArray[i] = dados;
-                i++;
+                listArquivo.add(leitor.readLine());
             } 
 
-            //Passa para o array de fora do try para poder retornar
-            //Não sei o que eu to fazendo, perguntar para o professor......           
-            infoArrayExterno = infoArray;
+            leitor.close();  
 
-            leitor.close();            
         } catch (IOException erro){
             System.out.println("Você precisa fazer alguma entrada para consultar");
         }
 
         //Retorna um array com as linhas de informação
-        return infoArrayExterno;      
+        return listArquivo;   
     }
 
     /**
@@ -66,13 +47,23 @@ public class ManipuladorArquivo {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public void manipuladorEscrita(String informacoes, String caminho) throws FileNotFoundException, IOException {
-        /*
-        List<Recurso> listRecursosArquivo = new ArrayList<Recurso>();
+    public void manipuladorEscrita(List<Recurso> recurso, String caminho) throws FileNotFoundException, IOException {
+        
+        FileWriter writer = new FileWriter(caminho); 
+        for(Recurso str: recurso) {
+            writer.write(
+                str.getRecursoNome() + ";" + 
+                str.getRecursoEmail() + ";" +  
+                str.getRecursoProjeto() + 
+                System.lineSeparator()
+            );
+        }
+        writer.close();
+
+        /*/List<Recurso> listRecursosArquivo = new ArrayList<Recurso>();
         StringBuffer sb = new StringBuffer();
-        Iterator<Recurso> it = listRecursosArquivo.iterator();
-        while(it.hasNext())
-        {
+        Iterator<Recurso> it = recurso.iterator();
+        while(it.hasNext()){
             sb.append(it.next());
             sb.append(";");
         }
@@ -84,7 +75,7 @@ public class ManipuladorArquivo {
         
 
         //Metodo 2 para armazenar dados
-        BufferedWriter fileWriter = null;
+        /*BufferedWriter fileWriter = null;
         try {
             fileWriter = new BufferedWriter(new FileWriter(new File(caminho), true));
             fileWriter.write(informacoes);
@@ -95,7 +86,7 @@ public class ManipuladorArquivo {
             System.err.println("Arquivo não encontrado.");
         } catch (IOException erro) {
             erro.printStackTrace();
-        }
+        }*/
 
         /* //Maneira 1 de fazer a criação do arquivo caso não exista, colocar texto em cada linha
         File entrada = new File(caminho);

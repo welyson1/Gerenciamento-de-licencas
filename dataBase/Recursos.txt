@@ -1,4 +1,3 @@
-Welyson;welyson@gmail.com;CLARO RAN
-Welyson;welyson@gmail.com;CLARO RAN
-Welyson;welyson@gmail.com;CLARO RAN
-Welyson;welyson@gmail.com;CLARO RAN
+2;2;2
+3;3;3
+4;4;4
