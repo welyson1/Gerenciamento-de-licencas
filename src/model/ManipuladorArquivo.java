@@ -1,7 +1,6 @@
 package model;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -13,7 +12,6 @@ import java.util.List;
 public class ManipuladorArquivo {
     
     /**
-     * 
      * @param caminho
      * @return vetor com a informações concatenadas
      */
@@ -35,7 +33,7 @@ public class ManipuladorArquivo {
             System.out.println("Você precisa fazer alguma entrada para consultar");
         }
 
-        //Retorna um array com as linhas de informação
+        //Retorna um arrayList com as linhas de informação
         return listArquivo;   
     }
 
@@ -47,18 +45,17 @@ public class ManipuladorArquivo {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public void manipuladorEscrita(List<Recurso> recurso, String caminho) throws FileNotFoundException, IOException {
-        
-        FileWriter writer = new FileWriter(caminho); 
+    public void manipuladorEscritaRecursos(List<Recurso> recurso, String caminho) throws FileNotFoundException, IOException {
+        FileWriter escritor = new FileWriter(caminho); 
         for(Recurso str: recurso) {
-            writer.write(
+            escritor.write(
                 str.getRecursoNome() + ";" + 
                 str.getRecursoEmail() + ";" +  
                 str.getRecursoProjeto() + 
                 System.lineSeparator()
             );
         }
-        writer.close();
+        escritor.close();
 
         /*/List<Recurso> listRecursosArquivo = new ArrayList<Recurso>();
         StringBuffer sb = new StringBuffer();
@@ -95,5 +92,26 @@ public class ManipuladorArquivo {
         escritor.write(System.getProperty( "line.separator" ));
         escritor.flush();
         escritor.close();*/
+    }
+
+    /**
+     * Metodo salva as informações do formulario em um arquivo txt
+     * 
+     * @param informacoes campos do cadastro concatenados por ;
+     * @param caminho local do arquivo com extensão .txt
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public void manipuladorEscritaLicencaObtida(List<LicencasObtidas> licencasObtidas, String caminho) throws FileNotFoundException, IOException {
+        FileWriter escritor = new FileWriter(caminho); 
+        for(LicencasObtidas item : licencasObtidas) {
+            escritor.write(
+                item.getDataConclusao() + ";" + 
+                item.getLicencasObtidasRecursoEmail() + ";" +  
+                item.getLicencasObtidasTreinamentoNome() + 
+                System.lineSeparator()
+            );
+        }
+        escritor.close();        
     }
 }

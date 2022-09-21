@@ -1,12 +1,17 @@
 package model;
 
-import java.util.Iterator;
-
 public class Recurso {
     String recursoNome = "";
     String recursoEmail = "";
     String recursoProjeto = "";
 
+    public Recurso() {
+    }
+    public Recurso(String recursoNome, String recursoEmail, String recursoProjeto) {
+        this.recursoNome = recursoNome;
+        this.recursoEmail = recursoEmail;
+        this.recursoProjeto = recursoProjeto;
+    }
     public String getRecursoNome() {
         return recursoNome;
     }
@@ -24,14 +29,5 @@ public class Recurso {
     }
     public void setRecursoProjeto(String recursoProjeto) {
         this.recursoProjeto = recursoProjeto;
-    }
-    
-    public Recurso(String recursoNome, String recursoEmail, String recursoProjeto) {
-        this.recursoNome = recursoNome;
-        this.recursoEmail = recursoEmail;
-        this.recursoProjeto = recursoProjeto;
-    }
-    public Iterator<Recurso> iterator() {
-        return null;
     }
 }
