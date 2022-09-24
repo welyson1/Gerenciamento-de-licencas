@@ -114,4 +114,48 @@ public class ManipuladorArquivo {
         }
         escritor.close();        
     }
+
+    /**
+     * Metodo salva as informações do formulario em um arquivo txt
+     * 
+     * @param informacoes campos do cadastro concatenados por ;
+     * @param caminho local do arquivo com extensão .txt
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public void manipuladorEscritaProjetos(List<Projeto> projetos, String caminho) throws FileNotFoundException, IOException {
+        FileWriter escritor = new FileWriter(caminho); 
+        for(Projeto item : projetos) {
+            escritor.write(
+                item.getProjetoNome() + ";" + 
+                item.getProjetoTecnologia() + ";" +  
+                item.getProjetoValor() + 
+                System.lineSeparator()
+            );
+        }
+        escritor.close();        
+    }
+
+    /**
+     * Metodo salva as informações do formulario em um arquivo txt
+     * 
+     * @param informacoes campos do cadastro concatenados por ;
+     * @param caminho local do arquivo com extensão .txt
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public void manipuladorEscritaLicencaNecessarias(List<LicencasNecessarias> licencasNecessarias, String caminho) throws FileNotFoundException, IOException {
+        FileWriter escritor = new FileWriter(caminho); 
+        for(LicencasNecessarias item : licencasNecessarias) {
+            escritor.write(
+                item.getTreinamentoNome() + ";" + 
+                item.getTreinamentoLink() + ";" +  
+                item.getTreinamentoCategoria() + ";" + 
+                item.getTreinamentoLevel() + 
+                System.lineSeparator()
+            );
+        }
+        escritor.close();        
+    }
+
 }

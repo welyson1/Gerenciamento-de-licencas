@@ -5,6 +5,10 @@ public class Projeto {
     String projetoTecnologia = null;
     String projetoValor = null;
 
+    public Projeto() {
+        
+    }
+
     public Projeto(String projetoNome, String projetoTecnologia, String projetoValor) {
         this.projetoNome = projetoNome;
         this.projetoTecnologia = projetoTecnologia;

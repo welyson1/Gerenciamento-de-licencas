@@ -1,9 +1,9 @@
 package model;
 
 public class Recurso {
-    String recursoNome = "";
-    String recursoEmail = "";
-    String recursoProjeto = "";
+    String recursoNome = null;
+    String recursoEmail = null;
+    String recursoProjeto = null;
 
     public Recurso() {
     }

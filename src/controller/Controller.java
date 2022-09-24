@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
-
-import javax.print.DocFlavor.STRING;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +14,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.LicencasNecessarias;
@@ -109,17 +105,17 @@ public class Controller implements Initializable{
 //-------------------------------------------------------------
 
     ManipuladorArquivo manipuladorArquivo = new ManipuladorArquivo();   
-    
+    /*
     String caminhoDataRecursos = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/Recursos.txt";
     String caminhoDataLicencasObtidas = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/LicencasObtidas.txt";
     String caminhoDataLicencasNecessarias = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/LicencasNecessarias.txt";
     String caminhoDataProjetos = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/Projetos.txt";
-    /*
+    */
     String caminhoDataRecursos = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/Recursos.txt";
     String caminhoDataLicencasObtidas = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/LicencasObtidas.txt";
     String caminhoDataLicencasNecessarias = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/LicencasNecessarias.txt";
     String caminhoDataProjetos = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/Projetos.txt";
-    */
+    
 //-------------------------------------------------------------  
 
     //Declaração de arrayList
@@ -131,20 +127,34 @@ public class Controller implements Initializable{
     //Declaração do observador
     private ObservableList<Recurso> observableList;
     private ObservableList<LicencasObtidas> observableListLicencasObtidas;
+    private ObservableList<Projeto> observablelistProjetos;
+    private ObservableList<LicencasNecessarias> observablelistLicencasNecessarias;
 
     @Override
     public void initialize(URL url, ResourceBundle rb){
         
         //Observador de seleção do item na lista
         tableViewRecursos.getSelectionModel().selectedItemProperty().addListener(
-            (observable, oldValue, newValue) -> recursoSelecionado(newValue));
+            (observable, oldValue, newValue) -> recursoSelecionado(newValue)
+        );
 
         tableViewLicencasObtidas.getSelectionModel().selectedItemProperty().addListener(
-            (observable, oldValue, newValue) -> recursoSelecionado(newValue));
+            (observable, oldValue, newValue) -> licencaSelecionado(newValue)
+        );
+        
+        tableViewProjeto.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> projetoSelecionado(newValue)
+        );
+
+        tableViewLicencaNecessarias.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> licencasNecessariaSelecionado(newValue)
+        );
 
         //Metodo chamado para iniciar com a lista carregada as informações do arquivo .txt        
         carregarRecursoNoArray();
-        carregarRecursoNoArrayLicencasObtidas();
+        carregarLicencasObtidasNoArray();
+        carregarProjetoNoArray();
+        carregarLicencasNecessariaNoArray();
     }
 //======================Recurso================================
 //-------------------------------------------------------------    
@@ -260,11 +270,11 @@ public class Controller implements Initializable{
         manipuladorArquivo.manipuladorEscritaLicencaObtida(listLicencasObtidas, caminhoDataLicencasObtidas); 
     }
     //Metodo de log para saber a seleção do cliente
-    public void recursoSelecionado(LicencasObtidas licencasObtidas) {
+    public void licencaSelecionado(LicencasObtidas licencasObtidas) {
         System.out.println("Seleção: " + licencasObtidas.getLicencasObtidasTreinamentoNome());
     }
     //Fazer um metodo que carrega os itens do .txt para a lista assim que abrir o software
-    public void carregarRecursoNoArrayLicencasObtidas() {
+    public void carregarLicencasObtidasNoArray() {
         //Declaração da lista provisoria para armazenar as strings brutas concatenadas
         List<String> listLicencasObtidasArquivo = new ArrayList<String>(); 
 
@@ -306,30 +316,163 @@ public class Controller implements Initializable{
 //======================Licenças necessarias===================
 //-------------------------------------------------------------
 
+//======================Projetos===============================
+//-------------------------------------------------------------
     @FXML
-    void cadastrarProjeto(ActionEvent event) {
+    void cadastrarProjeto(ActionEvent event) throws FileNotFoundException, IOException {
+        //Instancia do recurso
+        Projeto projeto = new Projeto(entradaNomeProjeto.getText(), entradaTecnologia.getText(), entradaValor.getText());
+ 
+        //Adição no arrayList
+        listProjetos.add(projeto);
+        tableViewProjeto();
 
+        //Salvar no arquivo de texto a cada cadastro
+        manipuladorArquivo.manipuladorEscritaProjetos(listProjetos, caminhoDataProjetos);
     }
     @FXML
-    void excluirProjeto(ActionEvent event) {
-
+    void excluirProjeto(ActionEvent event) throws FileNotFoundException, IOException {
+        //Passando o item selecionado para variavel
+        Projeto projetoRemover = tableViewProjeto.getSelectionModel().getSelectedItem();
+        //Log
+        System.out.println("Recurso removido" + projetoRemover.getProjetoNome());
+        //Remoção do recurso
+        tableViewProjeto.getItems().remove(projetoRemover);
+        //Remoção do ArrayList
+        listProjetos.remove(projetoRemover);
+        //Atualização da lista no arquivo
+        manipuladorArquivo.manipuladorEscritaProjetos(listProjetos, caminhoDataProjetos);
     }
     @FXML
-    void salvarNoAquivoProjeto(ActionEvent event) {
-
+    void salvarNoAquivoProjeto(ActionEvent event) throws FileNotFoundException, IOException {
+        manipuladorArquivo.manipuladorEscritaProjetos(listProjetos, caminhoDataProjetos);
     }
+    //Metodo de log para saber a seleção do cliente
+    public void projetoSelecionado(Projeto projeto) {
+        System.out.println("Seleção: " + projeto.getProjetoNome());
+    }
+    //Fazer um metodo que carrega os itens do .txt para a lista assim que abrir o software
+    public void carregarProjetoNoArray() {
+        //Declaração da lista provisoria para armazenar as strings brutas concatenadas
+        List<String> listProjetoArquivo = new ArrayList<String>(); 
 
+        //Retorno um arrayList de Strings com a informação concatenada com as informações a partir da leitura
+        listProjetoArquivo = manipuladorArquivo.manipuladorLeitura(caminhoDataProjetos);
 
+        //Intera para cada item do arrayList
+        for (String item : listProjetoArquivo) {
+            //Declaração do array para guardar as informações
+            Projeto projeto = new Projeto();
+
+            //Define o delimitador
+            StringTokenizer Linguicao = new StringTokenizer(item, ";");
+            
+            while (Linguicao.hasMoreTokens()){ //Executa enquanto tiver Tokens                
+                projeto.setProjetoNome(Linguicao.nextToken());
+                projeto.setProjetoTecnologia(Linguicao.nextToken());
+                projeto.setProjetoValor(Linguicao.nextToken());                
+            } 
+            
+            listProjetos.add(projeto);
+
+            //Associa as variaveis nas colunas do tableView
+            tableViewProjeto();
+        }
+    }
+    //Metodo que faz coisas da tableView
+    public void tableViewProjeto() {
+        //Associação das variaveis da classe com as probliedades da tabela 
+        tableViewColunaNomeProjeto.setCellValueFactory(new PropertyValueFactory<>("projetoNome"));          
+        tableViewColunaTecnologiaProjeto.setCellValueFactory(new PropertyValueFactory<>("projetoTecnologia"));          
+        tableviewColunaValorProjeto.setCellValueFactory(new PropertyValueFactory<>("projetoValor")); 
+
+        observablelistProjetos = FXCollections.observableArrayList(listProjetos);
+
+        //Coloca os itens na lista
+        tableViewProjeto.setItems(observablelistProjetos); 
+    }
+//======================Projetos===============================
+//-------------------------------------------------------------
+
+//======================LicencasNecessarias====================
+//-------------------------------------------------------------
     @FXML
-    void cadastroLicencaNecessaria(ActionEvent event) {
+    void cadastroLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
+        //Instancia do recurso
+        LicencasNecessarias licencasNecessarias = new LicencasNecessarias(entradaNomeLicencaNecessaria.getText(), entrataLinkLicencaNecessaria.getText(), entrataCategoriaLicencaNecessaria.getText(), entrataLevelLicencaNecessaria.getText());
+ 
+        //Adição no arrayList
+        listLicencasNecessarias.add(licencasNecessarias);
+        tableViewLicencaNecessarias();
 
+        //Salvar no arquivo de texto a cada cadastro
+        manipuladorArquivo.manipuladorEscritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
     }
     @FXML
-    void excluirLicencaNecessaria(ActionEvent event) {
-
+    void excluirLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
+        //Passando o item selecionado para variavel
+        LicencasNecessarias licencasNecessariasRemover = tableViewLicencaNecessarias.getSelectionModel().getSelectedItem();
+        //Log
+        System.out.println("Recurso removido" + licencasNecessariasRemover.getTreinamentoNome());
+        //Remoção do recurso
+        tableViewLicencaNecessarias.getItems().remove(licencasNecessariasRemover);
+        //Remoção do ArrayList
+        listLicencasNecessarias.remove(licencasNecessariasRemover);
+        //Atualização da lista no arquivo
+        manipuladorArquivo.manipuladorEscritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
     }
     @FXML
-    void salvarNoAquivoLicencaNecessaria(ActionEvent event) {
-
+    void salvarNoAquivoLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
+        //Salvar no arquivo de texto a cada cadastro
+        manipuladorArquivo.manipuladorEscritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
     }
+    //Metodo de log para saber a seleção do cliente
+    public void licencasNecessariaSelecionado(LicencasNecessarias licencasNecessarias) {
+        System.out.println("Seleção: " + licencasNecessarias.getTreinamentoNome());
+    }
+    //Fazer um metodo que carrega os itens do .txt para a lista assim que abrir o software
+    public void carregarLicencasNecessariaNoArray() {
+        //Declaração da lista provisoria para armazenar as strings brutas concatenadas
+        List<String> listLicencasNecessaria = new ArrayList<String>(); 
+
+        //Retorno um arrayList de Strings com a informação concatenada com as informações a partir da leitura
+        listLicencasNecessaria = manipuladorArquivo.manipuladorLeitura(caminhoDataLicencasNecessarias);
+
+        //Intera para cada item do arrayList
+        for (String item : listLicencasNecessaria) {
+            //Declaração do array para guardar as informações
+            LicencasNecessarias licencasNecessarias = new LicencasNecessarias();
+
+            //Define o delimitador
+            StringTokenizer Linguicao = new StringTokenizer(item, ";");
+            
+            while (Linguicao.hasMoreTokens()){ //Executa enquanto tiver Tokens                
+                licencasNecessarias.setTreinamentoNome(Linguicao.nextToken());
+                licencasNecessarias.setTreinamentoLink(Linguicao.nextToken());
+                licencasNecessarias.setTreinamentoCategoria(Linguicao.nextToken());
+                licencasNecessarias.setTreinamentoLevel(Linguicao.nextToken());                  
+            } 
+            
+            listLicencasNecessarias.add(licencasNecessarias);
+
+            //Associa as variaveis nas colunas do tableView
+            tableViewLicencaNecessarias();
+        }
+    }
+    //Metodo que faz coisas da tableView
+    public void tableViewLicencaNecessarias() {
+        //Associação das variaveis da classe com as probliedades da tabela 
+        tableViewColunaNomeLicencasNecessarias.setCellValueFactory(new PropertyValueFactory<>("treinamentoNome"));          
+        tableViewColunaLinkLicencasNecessarias.setCellValueFactory(new PropertyValueFactory<>("treinamentoLink"));          
+        tableviewColunaCategoriaLicencasNecessarias.setCellValueFactory(new PropertyValueFactory<>("treinamentoCategoria"));          
+        tableviewColunaLevelLicencasNecessarias.setCellValueFactory(new PropertyValueFactory<>("treinamentoLevel"));  
+
+        observablelistLicencasNecessarias = FXCollections.observableArrayList(listLicencasNecessarias);
+
+        //Coloca os itens na lista
+        tableViewLicencaNecessarias.setItems(observablelistLicencasNecessarias); 
+    }
+//======================LicencasNecessarias====================
+//-------------------------------------------------------------
+
 }
