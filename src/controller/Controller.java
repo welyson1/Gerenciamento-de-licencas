@@ -226,7 +226,8 @@ public class Controller implements Initializable{
 //======================Recurso================================
 //-------------------------------------------------------------
 
-
+//======================Licenças necessarias===================
+//-------------------------------------------------------------
     @FXML
     void cadastroLicencaObtida(ActionEvent event) throws FileNotFoundException, IOException {
         //Instancia do recurso
@@ -295,18 +296,26 @@ public class Controller implements Initializable{
         //Associação das variaveis da classe com as probliedades da tabela 
         tableViewColunaEmailLicencasObtidas.setCellValueFactory(new PropertyValueFactory<>("licencasObtidasRecursoEmail"));          
         tableViewColunaLicencaLicencasObtidas.setCellValueFactory(new PropertyValueFactory<>("licencasObtidasRecursoEmail"));          
-        tableViewColunaLicencaLicencasObtidas.setCellValueFactory(new PropertyValueFactory<>("dataConclusao")); 
+        tableViewColunaDataLicencaObtida.setCellValueFactory(new PropertyValueFactory<>("dataConclusao")); 
 
-        
         observableListLicencasObtidas = FXCollections.observableArrayList(listLicencasObtidas);
 
         //Coloca os itens na lista
         tableViewLicencasObtidas.setItems(observableListLicencasObtidas); 
     }
-
+//======================Licenças necessarias===================
+//-------------------------------------------------------------
 
     @FXML
     void cadastrarProjeto(ActionEvent event) {
+
+    }
+    @FXML
+    void excluirProjeto(ActionEvent event) {
+
+    }
+    @FXML
+    void salvarNoAquivoProjeto(ActionEvent event) {
 
     }
 
@@ -315,37 +324,12 @@ public class Controller implements Initializable{
     void cadastroLicencaNecessaria(ActionEvent event) {
 
     }
-
- 
-
     @FXML
     void excluirLicencaNecessaria(ActionEvent event) {
 
     }
-
-
-
-    @FXML
-    void excluirProjeto(ActionEvent event) {
-
-    }
-
-    @FXML
-    void excluirRecurso(ActionEvent event) {
-
-    }
-
-
-
     @FXML
     void salvarNoAquivoLicencaNecessaria(ActionEvent event) {
-
-    }
-
-
-
-    @FXML
-    void salvarNoAquivoProjeto(ActionEvent event) {
 
     }
 }
