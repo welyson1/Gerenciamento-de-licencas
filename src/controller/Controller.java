@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -23,23 +22,7 @@ import model.Projeto;
 import model.Recurso;
 
 public class Controller implements Initializable{
-
-    @FXML
-    private Button btnCadastrarProjeto;
-    @FXML
-    private Button btnCadastrarRecurso;
-    @FXML
-    private Button btnCadastroLicencaNecessaria;
-    @FXML
-    private Button btnCadastroLicencaObtida;
-    @FXML
-    private Button btnExcluirRecursos;
-    @FXML
-    private Button btnExcluirRecursos1;
-    @FXML
-    private Button btnExcluirRecursos2;
-    @FXML
-    private Button btnExcluirRecursos21;
+    
     @FXML
     private TextField entradaEmail;
     @FXML
@@ -92,7 +75,6 @@ public class Controller implements Initializable{
     private TableColumn<LicencasNecessarias, String> tableviewColunaLevelLicencasNecessarias;
     @FXML
     private TableColumn<Projeto, String> tableviewColunaValorProjeto;
-
     @FXML
     private TableColumn<Recurso, String> tableViewColunaEmail;
     @FXML
@@ -103,8 +85,9 @@ public class Controller implements Initializable{
     private TableColumn<Recurso, String> tableviewColunaProjeto;
 
 //-------------------------------------------------------------
+    //Instanciação do objeto que faz manipulações no arquivo de texto
+    ManipuladorArquivo manipuladorArquivo = new ManipuladorArquivo(); 
 
-    ManipuladorArquivo manipuladorArquivo = new ManipuladorArquivo();   
     /*
     String caminhoDataRecursos = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/Recursos.txt";
     String caminhoDataLicencasObtidas = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/LicencasObtidas.txt";
@@ -133,7 +116,7 @@ public class Controller implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb){
         
-        //Observador de seleção do item na lista
+        //Observador de seleção do item na tablewView
         tableViewRecursos.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> recursoSelecionado(newValue)
         );
@@ -168,7 +151,9 @@ public class Controller implements Initializable{
         tableViewRecursos();
 
         //Salvar no arquivo de texto a cada cadastro
-        manipuladorArquivo.manipuladorEscritaRecursos(listRecursos, caminhoDataRecursos);     
+        manipuladorArquivo.manipuladorEscritaRecursos(listRecursos, caminhoDataRecursos); 
+        
+        limparCamposRecurso();
     }
     //Metodo exclui o item e salva em um arquivo .txt
     @FXML
@@ -186,19 +171,64 @@ public class Controller implements Initializable{
     }
     //Metodo salva em um arquivo txt ao ser acionado
     @FXML
-    void salvarNoAquivo(ActionEvent event) throws FileNotFoundException, IOException {
+    void salvarRecurso(ActionEvent event) throws FileNotFoundException, IOException {        
+        editarRecurso();  
+
+        //Atualização do tablewView do recurso
+        tableViewRecursos.refresh();
+
+        //Atualização da lista no arquivo
         manipuladorArquivo.manipuladorEscritaRecursos(listRecursos, caminhoDataRecursos);
+
+        limparCamposRecurso();
     }
-    //Metodo de log para saber a seleção do cliente
+    
+    /**
+     * O recursoSelecionado pega o item selecionado pelo usuario e coloca os valores nos campos da interface
+     * @param recurso selecionado pelo usuario na tablewView
+     */
     public void recursoSelecionado(Recurso recurso) {
-        System.out.println("Seleção: " + recurso.getRecursoNome());
+        //Passando o item selecionado para variavel
+        Recurso recursoEditar = tableViewRecursos.getSelectionModel().getSelectedItem();
+
+        entradaNome.setText(recursoEditar.getRecursoNome());
+        entradaEmail.setText(recursoEditar.getRecursoEmail());
+        entradaProjeto.setText(recursoEditar.getRecursoProjeto());
     }
-    //Fazer um metodo que carrega os itens do .txt para a lista assim que abrir o software
+    
+    /**
+     * Metodo edita o recurso com com as novas informações dos campos inseridas pelo usuario
+     */
+    public void editarRecurso() {
+        //Variavel para armazenar o id do objeto selecionado
+        int idSelecao = 0;
+
+        //Passando o item selecionado para variavel
+        Recurso recursoEditar = tableViewRecursos.getSelectionModel().getSelectedItem();    
+
+        //Procura id do objeto na lista para fazer alteração
+        for (int i = 0; i < listRecursos.size(); i++){
+            if (listRecursos.get(i).getRecursoEmail() == recursoEditar.getRecursoEmail()){
+                idSelecao = i;                
+            }
+        } 
+
+        //Coloca o texto dos campos nas variaveis do objeto
+        recursoEditar.setRecursoNome(entradaNome.getText());
+        recursoEditar.setRecursoEmail(entradaEmail.getText());
+        recursoEditar.setRecursoProjeto(entradaProjeto.getText());
+
+        //Salva o objeto editado no objeto selecionado
+        listRecursos.set(idSelecao, recursoEditar);
+    }
+    /**
+     * O carregarRecursoNoArray pega as linhas do arquivo de texto, separa pelo delimitador e coloca nas variaveis do objeto que depois passa para um ArrayList
+     */
     public void carregarRecursoNoArray() {
         //Declaração da lista provisoria para armazenar as strings brutas concatenadas
         List<String> listRecursosArquivo = new ArrayList<String>(); 
 
-        //Retorno um arrayList  de Strings com a informação concatenada com as informações a partir da leitura
+        //Retorno um arrayList de Strings com a informação concatenada com as informações a partir da leitura
         listRecursosArquivo = manipuladorArquivo.manipuladorLeitura(caminhoDataRecursos);
 
         //Intera para cada item do arrayList
@@ -215,13 +245,16 @@ public class Controller implements Initializable{
                 recurso.setRecursoProjeto(Linguicao.nextToken());                
             } 
             
+            //Adiciona o recurso no ArrayList
             listRecursos.add(recurso);
-
-            //Associa as variaveis nas colunas do tableView
+            
             tableViewRecursos();
         }
     }
-    //Metodo que faz coisas da tableView
+    
+    /**
+     * O tableViewRecursos carrega os valores dos objetos nas colunas da tableView de recursos
+     */
     public void tableViewRecursos() {
         //Associação das variaveis da classe com as probliedades da tabela 
         tableViewColunaNome.setCellValueFactory(new PropertyValueFactory<>("recursoNome"));
@@ -233,13 +266,22 @@ public class Controller implements Initializable{
         //Coloca os itens na lista
         tableViewRecursos.setItems(observableList); 
     }
+    
+    /**
+     * Metodo limpa os campos preenchidos do recurso 
+     */
+    public void limparCamposRecurso() {
+        entradaNome.setText("");
+        entradaEmail.setText("");
+        entradaProjeto.setText("");        
+    }
 //======================Recurso================================
 //-------------------------------------------------------------
 
 //======================Licenças necessarias===================
 //-------------------------------------------------------------
     @FXML
-    void cadastroLicencaObtida(ActionEvent event) throws FileNotFoundException, IOException {
+    void cadastrorLicencaObtida(ActionEvent event) throws FileNotFoundException, IOException {
         //Instancia do recurso
         LicencasObtidas licencasObtidas = new LicencasObtidas(entradaEmailRecursoLicencaObtida.getText(),entradaNomeLicencaObtida.getText(),entradaDataLicencaObtida.getText());
  
@@ -266,7 +308,7 @@ public class Controller implements Initializable{
     }
     //Metodo salva em um arquivo txt ao ser acionado
     @FXML
-    void salvarNoAquivoLicencasObtidas(ActionEvent event) throws FileNotFoundException, IOException {
+    void salvarLicencasObtidas(ActionEvent event) throws FileNotFoundException, IOException {
         manipuladorArquivo.manipuladorEscritaLicencaObtida(listLicencasObtidas, caminhoDataLicencasObtidas); 
     }
     //Metodo de log para saber a seleção do cliente
@@ -290,9 +332,9 @@ public class Controller implements Initializable{
             StringTokenizer Linguicao = new StringTokenizer(item, ";");
             
             while (Linguicao.hasMoreTokens()){ //Executa enquanto tiver Tokens                
-                licencasObtidas.setDataConclusao(Linguicao.nextToken());
                 licencasObtidas.setLicencasObtidasRecursoEmail(Linguicao.nextToken());
                 licencasObtidas.setLicencasObtidasTreinamentoNome(Linguicao.nextToken());                
+                licencasObtidas.setDataConclusao(Linguicao.nextToken());
             } 
             
             listLicencasObtidas.add(licencasObtidas);
@@ -305,7 +347,7 @@ public class Controller implements Initializable{
     public void tableViewLicencasObtidas() {
         //Associação das variaveis da classe com as probliedades da tabela 
         tableViewColunaEmailLicencasObtidas.setCellValueFactory(new PropertyValueFactory<>("licencasObtidasRecursoEmail"));          
-        tableViewColunaLicencaLicencasObtidas.setCellValueFactory(new PropertyValueFactory<>("licencasObtidasRecursoEmail"));          
+        tableViewColunaLicencaLicencasObtidas.setCellValueFactory(new PropertyValueFactory<>("licencasObtidasTreinamentoNome"));          
         tableViewColunaDataLicencaObtida.setCellValueFactory(new PropertyValueFactory<>("dataConclusao")); 
 
         observableListLicencasObtidas = FXCollections.observableArrayList(listLicencasObtidas);
@@ -344,7 +386,7 @@ public class Controller implements Initializable{
         manipuladorArquivo.manipuladorEscritaProjetos(listProjetos, caminhoDataProjetos);
     }
     @FXML
-    void salvarNoAquivoProjeto(ActionEvent event) throws FileNotFoundException, IOException {
+    void salvarProjeto(ActionEvent event) throws FileNotFoundException, IOException {
         manipuladorArquivo.manipuladorEscritaProjetos(listProjetos, caminhoDataProjetos);
     }
     //Metodo de log para saber a seleção do cliente
@@ -397,7 +439,7 @@ public class Controller implements Initializable{
 //======================LicencasNecessarias====================
 //-------------------------------------------------------------
     @FXML
-    void cadastroLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
+    void cadastrarLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
         //Instancia do recurso
         LicencasNecessarias licencasNecessarias = new LicencasNecessarias(entradaNomeLicencaNecessaria.getText(), entrataLinkLicencaNecessaria.getText(), entrataCategoriaLicencaNecessaria.getText(), entrataLevelLicencaNecessaria.getText());
  
@@ -422,7 +464,7 @@ public class Controller implements Initializable{
         manipuladorArquivo.manipuladorEscritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
     }
     @FXML
-    void salvarNoAquivoLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
+    void salvarLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
         //Salvar no arquivo de texto a cada cadastro
         manipuladorArquivo.manipuladorEscritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
     }
