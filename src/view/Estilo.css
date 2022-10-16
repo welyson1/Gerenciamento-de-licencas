@@ -1,0 +1,343 @@
+/* 
+    Created on : 23 de mai. de 2022, 13:30:47
+    Author     : Welyson
+*/
+
+/*-----------------------------------dataPicker--------------------------------*/
+.calendar-grid {
+    -fx-background-color: #EE534F;
+}
+
+.date-picker > .text-field {
+    -fx-font-family: Consolas;
+    -fx-font-size: 12;
+    -fx-control-inner-background: #EEDBCC;
+}
+
+.date-picker-popup > .month-year-pane {
+    -fx-base: #2F3136;
+    -fx-mark-highlight-color: -fx-light-text-color ;
+}
+
+.date-picker:editable > .arrow-button > * {
+    -fx-opacity: 0; /* Set the node in the button to be visible */
+}
+
+.date-picker > .arrow-button {
+    -fx-background-image: url("img/icon-calendar.png"); /* Url of the icon */
+    -fx-background-size: 60% 60%; /* Can be `cover` or `100% 100%` ect. */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center; /* Put the icon in the center */
+}
+
+.date-picker:disabled, .date-picker:disabled > * {
+  -fx-opacity: 1.0 ;
+  -fx-font-fill: #EEDBCC;
+}
+/*--------------------------------- data Picker --------------------------------*/
+
+/*-------------------------- Entradas de dados ---------------------------------*/
+.inputs{
+    -fx-background-color: #EEDBCC;
+    -fx-background-radius: 5;
+    -fx-font-family: Consolas;
+    -fx-font-size: 12;    
+}
+
+.inputs:disabled, .inputs:disabled > * {
+  -fx-opacity: 1.0 ;
+  -fx-font-fill: #919398;
+}
+
+.combo-box .list-cell{
+  -fx-opacity: 1.0 ;
+  -fx-font-fill: #919398; 
+}
+/*-------------------------- Entradas de dados ---------------------------------*/
+
+/*----------------------------------- Text Area --------------------------------*/
+.text-area .content{
+    -fx-background-color: #EEDBCC;
+    -fx-background-radius: 5;
+}
+
+.text-area {
+    -fx-font-family: Consolas;
+    -fx-font-size: 12;
+    -fx-display-caret:true;
+}
+
+.text-area:disabled, .text-area:disabled > * {
+  -fx-opacity: 1.0 ;
+  -fx-font-fill: #EEDBCC;
+}
+/*----------------------------------- Text Area --------------------------------*/
+
+/*----------------------------------- Projeto --------------------------------*/
+.tab-pane *.tab-header-area *.tab-header-background {
+  -fx-background-color:transparent;
+}
+
+.tab { 
+  -fx-font-size: 12;
+  -fx-background-color: #EE534F;
+}
+
+.tab-label {
+      -fx-text-fill: #ffffff;
+}
+
+.tab:hover {
+  -fx-background-color: #B04341;
+}
+
+.tab:selected {
+    -fx-background-color: #B04341;
+}
+/*----------------------------------- Projeto --------------------------------*/
+
+.fundo{
+    -fx-background-color: #2F3136;
+    -fx-background-radius: 5;
+}
+
+/*------------------------------------ Textos ---------------------------------*/
+.texto{    
+    /*-fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;*/
+    -fx-text-fill: #919398;
+    -fx-font-family: consolas;
+      
+}
+/*------------------------------------ Textos ---------------------------------*/
+
+/*------------------------------------Scroll Tarefas-----------------------------*/
+
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: white;
+    -fx-background-radius: 5em;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: #212226;    
+}
+
+.box-tarefas{
+    -fx-background-color: transparent;
+}
+/*------------------------------------Scroll Tarefas-----------------------------*/
+
+/*----------------------------------- Objeto Tarefa -------------------------------*/
+.tarefa{
+    -fx-background-color: #EE534F;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 5);
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 16px;
+}
+
+.tarefa > .label{    
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 2, 0, 0, 2);
+    -fx-text-fill: #FFFFFF;
+}
+
+.tarefa:hover {
+    -fx-background-color: #B04341;
+}
+/*----------------------------------- Objeto Tarefa ------------------------------*/
+
+/*----------------------------------- Botão sessoes -----------------------------*/
+.sessao {
+    -fx-background-color: #EE534F; 
+    -fx-border-radius: 5 0 0 5;
+    -fx-background-radius: 5 0 0 5;
+    -fx-font-size: 16px;
+    -fx-text-fill: #FFFFFF;
+}
+
+.sessao:hover {
+  -fx-background-color: #EE534F;
+}
+
+.sessao:hover,
+.sessao:focused {
+  -fx-background-color: #212226;
+}
+/*----------------------------------- Botão sessoes -----------------------------*/
+
+/*----------------------------------- Botões -------------------------*/
+.button {
+    -fx-background-color: #EE534F;
+    -fx-text-fill: #FFFFFF;
+}
+
+.button-mensagem:hover {
+    /*-fx-background-color: #B04341;*/
+    -fx-graphic: url("img/icon-mail.png");
+}
+.button-projeto:hover {
+    /*-fx-background-color: #B04341;*/
+    -fx-graphic: url("img/icon-projeto.png");
+}
+.button-sair:hover {
+    /*-fx-background-color: #B04341;*/
+    -fx-graphic: url("img/icon-sair.png");
+}
+.button-excluir:hover {
+    /*-fx-background-color: #B04341;*/
+    -fx-graphic: url("img/icon-apagar.png");
+}
+.button-salvar:hover {
+    /*-fx-background-color: #B04341;*/
+    -fx-graphic: url("img/icon-save.png");
+}
+.button-criar:hover {
+    /*-fx-background-color: #B04341;*/
+    -fx-graphic: url("img/icon-criar.png");
+}
+
+.button-enviar:hover {
+    -fx-graphic: url("img/icon-enviar.png");
+}
+
+.button:disabled, .button:disabled > * {
+  -fx-background-opacity: 0.8 ;
+}
+
+/*----------------------------------- Botões --------------------------*/
+
+/*------------------------------ Buttons filtro ------------------------------*/
+.button-aplicar-filtro {
+    -fx-background-color: transparent;
+    -fx-graphic: url("img/icon-aplicar.png");
+}
+
+.button-aplicar-filtro:hover {
+    -fx-opacity: 0.5;
+    
+}
+
+.button-limpar-filtro {
+    -fx-background-color: transparent;
+    -fx-graphic: url("img/icon-limpar.png");
+}
+
+.button-limpar-filtro:hover {
+    -fx-opacity: 0.5;
+    
+}
+
+.button-add-tarefa {
+    -fx-background-color: transparent;
+    -fx-graphic: url("img/icon-add.png");
+}
+
+.button-add-tarefa:hover {
+    -fx-opacity: 0.5;
+    
+}
+
+.button-salvar {
+    -fx-background-color: transparent;
+    -fx-graphic: url("img/icon-save.png");
+}
+
+.button-salvar:hover {
+    -fx-opacity: 0.5;
+    
+}
+
+.button-excluir {
+    -fx-background-color: transparent;
+    -fx-graphic: url("img/icon-apagar.png");
+}
+
+.button-excluir:hover {
+    -fx-opacity: 0.5;
+    
+}
+/*------------------------------ Buttons filtro ------------------------------*/
+
+/*------------------------------ Texto destaque ------------------------------*/
+.label-destaque{    
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 2, 0, 0, 2);
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: Consolas;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+/*------------------------------ Texto destaque ------------------------------*/
+
+/*------------------------------------- Tabelas ------------------------------*/
+.table-view{
+    -fx-background-color: transparent;
+ }
+ 
+ .table-view:focused{
+     -fx-background-color: transparent;
+ }
+ 
+ .table-view .column-header-background{
+     -fx-background-color: #EE534F;
+ }
+ 
+ .table-view .column-header-background .label{
+     -fx-background-color: transparent;
+     -fx-text-fill: #FFFFFF;
+ }
+ 
+ .table-view .column-header {
+     -fx-background-color: transparent;
+ }
+ 
+ .table-view .table-cell{
+     -fx-text-fill: #FFFFFF;
+ }
+ 
+ .table-row-cell{
+     -fx-background-color: -fx-table-cell-border-color, #616161;
+     -fx-background-insets: 0, 0 0 1 0;
+     -fx-padding: 0.0em; 
+ }
+ 
+ .table-row-cell:odd{
+     -fx-background-color: -fx-table-cell-border-color, #2F3136;
+     -fx-background-insets: 0, 0 0 1 0;
+     -fx-padding: 0.0em;
+ }
+ 
+ .table-row-cell:selected {
+     -fx-background-color: #EE534F;
+     -fx-background-insets: 0;
+     -fx-background-radius: 1;
+ }
+
+.table-view .column-header-background .filler {
+    -fx-background-color: #EE534F;
+}
+ /*------------------------------------- Tabelas ------------------------------*/

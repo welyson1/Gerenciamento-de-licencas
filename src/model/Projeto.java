@@ -1,6 +1,8 @@
 package model;
 
-public class Projeto {
+import java.io.Serializable;
+
+public class Projeto implements Serializable{
     String projetoNome = null;
     String projetoTecnologia = null;
     String projetoValor = null;
