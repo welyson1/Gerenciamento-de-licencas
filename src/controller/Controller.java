@@ -1,6 +1,7 @@
 package controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import model.ManipuladorArquivo;
 import model.Projeto;
 import model.Recurso;
 
-public class Controller implements Initializable{
+public class Controller implements Initializable, Serializable{
     
     @FXML
     private TextField entradaEmail;
@@ -145,14 +146,15 @@ public class Controller implements Initializable{
     void cadastrarRecurso(ActionEvent event) throws FileNotFoundException, IOException {         
         //Instancia do recurso
         Recurso recurso = new Recurso(entradaNome.getText(), entradaEmail.getText(), entradaProjeto.getText());
- 
+          
         //Adição no arrayList
         listRecursos.add(recurso);
         tableViewRecursos();
 
         //Salvar no arquivo de texto a cada cadastro
-        manipuladorArquivo.manipuladorEscritaRecursos(listRecursos, caminhoDataRecursos); 
+        manipuladorArquivo.escritaRecursos(listRecursos, caminhoDataRecursos);    
         
+        //Limpar campos do formulario
         limparCamposRecurso();
     }
     //Metodo exclui o item e salva em um arquivo .txt
@@ -166,8 +168,9 @@ public class Controller implements Initializable{
         tableViewRecursos.getItems().remove(recursoRemover);
         //Remoção do ArrayList
         listRecursos.remove(recursoRemover);
+        
         //Atualização da lista no arquivo
-        manipuladorArquivo.manipuladorEscritaRecursos(listRecursos, caminhoDataRecursos);
+        manipuladorArquivo.escritaRecursos(listRecursos, caminhoDataRecursos);
         
         limparCamposRecurso();
     }
@@ -180,7 +183,7 @@ public class Controller implements Initializable{
         tableViewRecursos.refresh();
 
         //Atualização da lista no arquivo
-        manipuladorArquivo.manipuladorEscritaRecursos(listRecursos, caminhoDataRecursos);
+        manipuladorArquivo.escritaRecursos(listRecursos, caminhoDataRecursos);
 
         limparCamposRecurso();
     }
@@ -223,35 +226,16 @@ public class Controller implements Initializable{
         //Salva o objeto editado no objeto selecionado
         listRecursos.set(idSelecao, recursoEditar);
     }
+    
     /**
-     * O carregarRecursoNoArray pega as linhas do arquivo de texto, separa pelo delimitador e coloca nas variaveis do objeto que depois passa para um ArrayList
+     * O carregarRecursoNoArray pega os objetos do arrayList e carrega no tableView da interface
      */
-    public void carregarRecursoNoArray() {
-        //Declaração da lista provisoria para armazenar as strings brutas concatenadas
-        List<String> listRecursosArquivo = new ArrayList<String>(); 
+    public void carregarRecursoNoArray() {        
 
-        //Retorno um arrayList de Strings com a informação concatenada com as informações a partir da leitura
-        listRecursosArquivo = manipuladorArquivo.manipuladorLeitura(caminhoDataRecursos);
+        listRecursos = manipuladorArquivo.leituraRecurso(caminhoDataRecursos);
 
-        //Intera para cada item do arrayList
-        for (String item : listRecursosArquivo) {
-            //Declaração do array para guardar as informações
-            Recurso recurso = new Recurso();
-
-            //Define o delimitador
-            StringTokenizer Linguicao = new StringTokenizer(item, ";");
-            
-            while (Linguicao.hasMoreTokens()){ //Executa enquanto tiver Tokens                
-                recurso.setRecursoNome(Linguicao.nextToken());
-                recurso.setRecursoEmail(Linguicao.nextToken());
-                recurso.setRecursoProjeto(Linguicao.nextToken());                
-            } 
-            
-            //Adiciona o recurso no ArrayList
-            listRecursos.add(recurso);
-            
-            tableViewRecursos();
-        }
+        //Associa as variaveis nas colunas do tableView
+        tableViewRecursos();
     }
     
     /**
@@ -292,7 +276,10 @@ public class Controller implements Initializable{
         tableViewLicencasObtidas();
 
         //Salvar no arquivo de texto a cada cadastro
-        manipuladorArquivo.manipuladorEscritaLicencaObtida(listLicencasObtidas, caminhoDataLicencasObtidas);     
+        manipuladorArquivo.escritaLicencaObtida(listLicencasObtidas, caminhoDataLicencasObtidas);     
+
+        //Limpar campos do formulario
+        limparCamposLicencasObtidas();
     }
     //Metodo exclui o item e salva em um arquivo .txt
     @FXML
@@ -306,7 +293,7 @@ public class Controller implements Initializable{
         //Remoção do ArrayList
         listLicencasObtidas.remove(licencasObtidasRemover);
         //Atualização da lista no arquivo
-        manipuladorArquivo.manipuladorEscritaLicencaObtida(listLicencasObtidas, caminhoDataLicencasObtidas); 
+        manipuladorArquivo.escritaLicencaObtida(listLicencasObtidas, caminhoDataLicencasObtidas); 
         
         limparCamposLicencasObtidas();
     }
@@ -317,7 +304,7 @@ public class Controller implements Initializable{
 
         tableViewLicencasObtidas.refresh();
 
-        manipuladorArquivo.manipuladorEscritaLicencaObtida(listLicencasObtidas, caminhoDataLicencasObtidas); 
+        manipuladorArquivo.escritaLicencaObtida(listLicencasObtidas, caminhoDataLicencasObtidas); 
 
         limparCamposLicencasObtidas();
     }
@@ -361,34 +348,13 @@ public class Controller implements Initializable{
     }
 
     /**
-     * O carregarLicencasObtidasNoArray pega as linhas do arquivo de texto, separa pelo delimitador e coloca nas variaveis do objeto que depois passa para um ArrayList
+     * O carregarLicencasObtidasNoArray pega os objetos do arrayList e carrega no tableView da interface
      */
     public void carregarLicencasObtidasNoArray() {
-        //Declaração da lista provisoria para armazenar as strings brutas concatenadas
-        List<String> listLicencasObtidasArquivo = new ArrayList<String>(); 
+        listLicencasObtidas = manipuladorArquivo.leituraLicencaObtida(caminhoDataLicencasObtidas);
 
-        //Retorno um arrayList  de Strings com a informação concatenada com as informações a partir da leitura
-        listLicencasObtidasArquivo = manipuladorArquivo.manipuladorLeitura(caminhoDataLicencasObtidas);
-
-        //Intera para cada item do arrayList
-        for (String item : listLicencasObtidasArquivo) {
-            //Declaração do array para guardar as informações
-            LicencasObtidas licencasObtidas = new LicencasObtidas();
-
-            //Define o delimitador
-            StringTokenizer Linguicao = new StringTokenizer(item, ";");
-            
-            while (Linguicao.hasMoreTokens()){ //Executa enquanto tiver Tokens                
-                licencasObtidas.setLicencasObtidasRecursoEmail(Linguicao.nextToken());
-                licencasObtidas.setLicencasObtidasTreinamentoNome(Linguicao.nextToken());                
-                licencasObtidas.setDataConclusao(Linguicao.nextToken());
-            } 
-            
-            listLicencasObtidas.add(licencasObtidas);
-
-            //Associa as variaveis nas colunas do tableView
-            tableViewLicencasObtidas();
-        }
+        //Associa as variaveis nas colunas do tableView
+        tableViewLicencasObtidas();
     }
     
     /**
@@ -417,143 +383,6 @@ public class Controller implements Initializable{
 //======================Licenças Obtidas===================
 //-------------------------------------------------------------
 
-//======================Projetos===============================
-//-------------------------------------------------------------
-    @FXML
-    void cadastrarProjeto(ActionEvent event) throws FileNotFoundException, IOException {
-        //Instancia do recurso
-        Projeto projeto = new Projeto(entradaNomeProjeto.getText(), entradaTecnologia.getText(), entradaValor.getText());
- 
-        //Adição no arrayList
-        listProjetos.add(projeto);
-        tableViewProjeto();
-
-        //Salvar no arquivo de texto a cada cadastro
-        manipuladorArquivo.manipuladorEscritaProjetos(listProjetos, caminhoDataProjetos);
-    }
-    //Metodo exclui o item e salva em um arquivo .txt
-    @FXML
-    void excluirProjeto(ActionEvent event) throws FileNotFoundException, IOException {
-        //Passando o item selecionado para variavel
-        Projeto projetoRemover = tableViewProjeto.getSelectionModel().getSelectedItem();
-        //Log
-        System.out.println("Recurso removido" + projetoRemover.getProjetoNome());
-        //Remoção do recurso
-        tableViewProjeto.getItems().remove(projetoRemover);
-        //Remoção do ArrayList
-        listProjetos.remove(projetoRemover);
-        //Atualização da lista no arquivo
-        manipuladorArquivo.manipuladorEscritaProjetos(listProjetos, caminhoDataProjetos);
-
-        limparCamposProjeto();
-    }
-
-    //Metodo salva em um arquivo txt ao ser acionado
-    @FXML
-    void salvarProjeto(ActionEvent event) throws FileNotFoundException, IOException {
-        editarProjeto();
-
-        tableViewProjeto.refresh();
-
-        manipuladorArquivo.manipuladorEscritaProjetos(listProjetos, caminhoDataProjetos);
-
-        limparCamposProjeto();
-    }
-
-    /**
-     * O recursoSelecionado pega o item selecionado pelo usuario e coloca os valores nos campos da interface
-     * @param projeto selecionado pelo usuario na tablewView
-     */
-    public void projetoSelecionado(Projeto projeto) {
-        Projeto projetoEditar = tableViewProjeto.getSelectionModel().getSelectedItem();
-
-        entradaNomeProjeto.setText(projetoEditar.getProjetoNome());
-        entradaTecnologia.setText(projetoEditar.getProjetoTecnologia());
-        entradaValor.setText(projetoEditar.getProjetoValor());
-    }
-
-    /**
-     * Metodo edita o recurso com com as novas informações dos campos inseridas pelo usuario
-     */
-    public void editarProjeto() {
-        //Variavel para armazenar o id do objeto selecionado
-        int idSelecao = 0;
-
-        //Passando o item selecionado para variavel
-        Projeto projetoEditar = tableViewProjeto.getSelectionModel().getSelectedItem();    
-
-        //Procura id do objeto na lista para fazer alteração
-        for (int i = 0; i < listProjetos.size(); i++){
-            if (listProjetos.get(i).getProjetoNome() == projetoEditar.getProjetoNome()){
-                idSelecao = i;                
-            }
-        } 
-
-        //Coloca o texto dos campos nas variaveis do objeto
-        projetoEditar.setProjetoNome(entradaNomeProjeto.getText());
-        projetoEditar.setProjetoTecnologia(entradaTecnologia.getText());
-        projetoEditar.setProjetoValor(entradaValor.getText()); 
-
-        //Salva o objeto editado no objeto selecionado
-        listProjetos.set(idSelecao, projetoEditar);
-    }
-
-    /**
-     * O carregarProjetoNoArray pega as linhas do arquivo de texto, separa pelo delimitador e coloca nas variaveis do objeto que depois passa para um ArrayList
-     */
-    public void carregarProjetoNoArray() {
-        //Declaração da lista provisoria para armazenar as strings brutas concatenadas
-        List<String> listProjetoArquivo = new ArrayList<String>(); 
-
-        //Retorno um arrayList de Strings com a informação concatenada com as informações a partir da leitura
-        listProjetoArquivo = manipuladorArquivo.manipuladorLeitura(caminhoDataProjetos);
-
-        //Intera para cada item do arrayList
-        for (String item : listProjetoArquivo) {
-            //Declaração do array para guardar as informações
-            Projeto projeto = new Projeto();
-
-            //Define o delimitador
-            StringTokenizer Linguicao = new StringTokenizer(item, ";");
-            
-            while (Linguicao.hasMoreTokens()){ //Executa enquanto tiver Tokens                
-                projeto.setProjetoNome(Linguicao.nextToken());
-                projeto.setProjetoTecnologia(Linguicao.nextToken());
-                projeto.setProjetoValor(Linguicao.nextToken());                
-            } 
-            
-            listProjetos.add(projeto);
-
-            tableViewProjeto();
-        }
-    }
-    
-    /**
-     * O tableViewRecursos carrega os valores dos objetos nas colunas da tableView de recursos
-     */
-    public void tableViewProjeto() {
-        //Associação das variaveis da classe com as probliedades da tabela 
-        tableViewColunaNomeProjeto.setCellValueFactory(new PropertyValueFactory<>("projetoNome"));          
-        tableViewColunaTecnologiaProjeto.setCellValueFactory(new PropertyValueFactory<>("projetoTecnologia"));          
-        tableviewColunaValorProjeto.setCellValueFactory(new PropertyValueFactory<>("projetoValor")); 
-
-        observablelistProjetos = FXCollections.observableArrayList(listProjetos);
-
-        //Coloca os itens na lista
-        tableViewProjeto.setItems(observablelistProjetos); 
-    }
-
-    /**
-     * Metodo limpa os campos preenchidos do recurso 
-     */
-    public void limparCamposProjeto() {
-        entradaNomeProjeto.setText("");
-        entradaTecnologia.setText("");
-        entradaValor.setText("");        
-    }
-//======================Projetos===============================
-//-------------------------------------------------------------
-
 //======================Licencas Necessarias====================
 //-------------------------------------------------------------
     @FXML
@@ -566,7 +395,10 @@ public class Controller implements Initializable{
         tableViewLicencaNecessarias();
 
         //Salvar no arquivo de texto a cada cadastro
-        manipuladorArquivo.manipuladorEscritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
+        manipuladorArquivo.escritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
+
+        //Limpar campos do formulario
+        limparCamposLicencasNecessarias();
     }
     @FXML
     void excluirLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
@@ -579,7 +411,7 @@ public class Controller implements Initializable{
         //Remoção do ArrayList
         listLicencasNecessarias.remove(licencasNecessariasRemover);
         //Atualização da lista no arquivo
-        manipuladorArquivo.manipuladorEscritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
+        manipuladorArquivo.escritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
     }
     @FXML
     void salvarLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
@@ -588,7 +420,7 @@ public class Controller implements Initializable{
         tableViewLicencaNecessarias.refresh();
 
         //Salvar no arquivo de texto a cada cadastro
-        manipuladorArquivo.manipuladorEscritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
+        manipuladorArquivo.escritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
 
         limparCamposLicencasNecessarias();
     }
@@ -634,35 +466,14 @@ public class Controller implements Initializable{
     }
     
     /**
-     * O carregarProjetoNoArray pega as linhas do arquivo de texto, separa pelo delimitador e coloca nas variaveis do objeto que depois passa para um ArrayList
+     * O carregarLicencasNecessariaNoArray pega os objetos do arrayList e carrega no tableView da interface
      */
     public void carregarLicencasNecessariaNoArray() {
-        //Declaração da lista provisoria para armazenar as strings brutas concatenadas
-        List<String> listLicencasNecessaria = new ArrayList<String>(); 
 
-        //Retorno um arrayList de Strings com a informação concatenada com as informações a partir da leitura
-        listLicencasNecessaria = manipuladorArquivo.manipuladorLeitura(caminhoDataLicencasNecessarias);
+        listLicencasNecessarias = manipuladorArquivo.leituraLicencaNecessarias(caminhoDataLicencasNecessarias);
 
-        //Intera para cada item do arrayList
-        for (String item : listLicencasNecessaria) {
-            //Declaração do array para guardar as informações
-            LicencasNecessarias licencasNecessarias = new LicencasNecessarias();
-
-            //Define o delimitador
-            StringTokenizer Linguicao = new StringTokenizer(item, ";");
-            
-            while (Linguicao.hasMoreTokens()){ //Executa enquanto tiver Tokens                
-                licencasNecessarias.setTreinamentoNome(Linguicao.nextToken());
-                licencasNecessarias.setTreinamentoLink(Linguicao.nextToken());
-                licencasNecessarias.setTreinamentoCategoria(Linguicao.nextToken());
-                licencasNecessarias.setTreinamentoLevel(Linguicao.nextToken());                  
-            } 
-            
-            listLicencasNecessarias.add(licencasNecessarias);
-
-            //Associa as variaveis nas colunas do tableView
-            tableViewLicencaNecessarias();
-        }
+        //Associa as variaveis nas colunas do tableView
+        tableViewLicencaNecessarias();
     }
     
     /**
@@ -693,4 +504,123 @@ public class Controller implements Initializable{
 //======================Licencas Necessarias====================
 //-------------------------------------------------------------
 
+//======================Projetos===============================
+//-------------------------------------------------------------
+    @FXML
+    void cadastrarProjeto(ActionEvent event) throws FileNotFoundException, IOException {
+        //Instancia do recurso
+        Projeto projeto = new Projeto(entradaNomeProjeto.getText(), entradaTecnologia.getText(), entradaValor.getText());
+
+        //Adição no arrayList
+        listProjetos.add(projeto);
+        tableViewProjeto();
+
+        //Salvar no arquivo de texto a cada cadastro
+        manipuladorArquivo.escritaProjetos(listProjetos, caminhoDataProjetos);
+
+        //Limpar campos do formulario
+        limparCamposProjeto();
+    }
+    //Metodo exclui o item e salva em um arquivo .txt
+    @FXML
+    void excluirProjeto(ActionEvent event) throws FileNotFoundException, IOException {
+        //Passando o item selecionado para variavel
+        Projeto projetoRemover = tableViewProjeto.getSelectionModel().getSelectedItem();
+        //Log
+        System.out.println("Recurso removido" + projetoRemover.getProjetoNome());
+        //Remoção do recurso
+        tableViewProjeto.getItems().remove(projetoRemover);
+        //Remoção do ArrayList
+        listProjetos.remove(projetoRemover);
+        //Atualização da lista no arquivo
+        manipuladorArquivo.escritaProjetos(listProjetos, caminhoDataProjetos);
+
+        limparCamposProjeto();
+    }
+
+    //Metodo salva em um arquivo txt ao ser acionado
+    @FXML
+    void salvarProjeto(ActionEvent event) throws FileNotFoundException, IOException {
+        editarProjeto();
+
+        tableViewProjeto.refresh();
+
+        manipuladorArquivo.escritaProjetos(listProjetos, caminhoDataProjetos);
+
+        limparCamposProjeto();
+    }
+
+    /**
+     * O recursoSelecionado pega o item selecionado pelo usuario e coloca os valores nos campos da interface
+     * @param projeto selecionado pelo usuario na tablewView
+     */
+    public void projetoSelecionado(Projeto projeto) {
+        Projeto projetoEditar = tableViewProjeto.getSelectionModel().getSelectedItem();
+
+        entradaNomeProjeto.setText(projetoEditar.getProjetoNome());
+        entradaTecnologia.setText(projetoEditar.getProjetoTecnologia());
+        entradaValor.setText(projetoEditar.getProjetoValor());
+    }
+
+    /**
+     * Metodo edita o recurso com com as novas informações dos campos inseridas pelo usuario
+     */
+    public void editarProjeto() {
+        //Variavel para armazenar o id do objeto selecionado
+        int idSelecao = 0;
+
+        //Passando o item selecionado para variavel
+        Projeto projetoEditar = tableViewProjeto.getSelectionModel().getSelectedItem();    
+
+        //Procura id do objeto na lista para fazer alteração
+        for (int i = 0; i < listProjetos.size(); i++){
+            if (listProjetos.get(i).getProjetoNome() == projetoEditar.getProjetoNome()){
+                idSelecao = i;                
+            }
+        } 
+
+        //Coloca o texto dos campos nas variaveis do objeto
+        projetoEditar.setProjetoNome(entradaNomeProjeto.getText());
+        projetoEditar.setProjetoTecnologia(entradaTecnologia.getText());
+        projetoEditar.setProjetoValor(entradaValor.getText()); 
+
+        //Salva o objeto editado no objeto selecionado
+        listProjetos.set(idSelecao, projetoEditar);
+    }
+
+    /**
+     * O carregarProjetoNoArray pega os objetos do arrayList e carrega no tableView da interface
+     */
+    public void carregarProjetoNoArray() {
+        listProjetos = manipuladorArquivo.leituraProjetos(caminhoDataProjetos);
+
+        //Associa as variaveis nas colunas do tableView
+        tableViewProjeto();
+    }
+
+    /**
+     * O tableViewRecursos carrega os valores dos objetos nas colunas da tableView de recursos
+     */
+    public void tableViewProjeto() {
+        //Associação das variaveis da classe com as probliedades da tabela 
+        tableViewColunaNomeProjeto.setCellValueFactory(new PropertyValueFactory<>("projetoNome"));          
+        tableViewColunaTecnologiaProjeto.setCellValueFactory(new PropertyValueFactory<>("projetoTecnologia"));          
+        tableviewColunaValorProjeto.setCellValueFactory(new PropertyValueFactory<>("projetoValor")); 
+
+        observablelistProjetos = FXCollections.observableArrayList(listProjetos);
+
+        //Coloca os itens na lista
+        tableViewProjeto.setItems(observablelistProjetos); 
+    }
+
+    /**
+     * Metodo limpa os campos preenchidos do recurso 
+     */
+    public void limparCamposProjeto() {
+        entradaNomeProjeto.setText("");
+        entradaTecnologia.setText("");
+        entradaValor.setText("");        
+    }
+//======================Projetos===============================
+//-------------------------------------------------------------
 }

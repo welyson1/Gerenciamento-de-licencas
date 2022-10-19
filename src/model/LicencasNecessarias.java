@@ -1,6 +1,8 @@
 package model;
 
-public class LicencasNecessarias {
+import java.io.Serializable;
+
+public class LicencasNecessarias implements Serializable{
     String treinamentoNome = null;
     String treinamentoLink = null;
     String treinamentoCategoria = null;

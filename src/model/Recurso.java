@@ -1,6 +1,8 @@
 package model;
 
-public class Recurso {
+import java.io.Serializable;
+
+public class Recurso implements Serializable{
     String recursoNome = "";
     String recursoEmail = "";
     String recursoProjeto = "";
@@ -29,5 +31,8 @@ public class Recurso {
     }
     public void setRecursoProjeto(String recursoProjeto) {
         this.recursoProjeto = recursoProjeto;
+    }
+    public String readObject() {
+        return null;
     }
 }

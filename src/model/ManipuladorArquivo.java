@@ -1,161 +1,205 @@
 package model;
 
-import java.io.BufferedReader;
-import java.io.File;
+import java.io.EOFException;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManipuladorArquivo {
+public class ManipuladorArquivo{
+//Recurso
+    /**
+     * Metodo que salva os objetos em arquivo binario
+     * @param recurso lista de objetos de do tipo recurso
+     * @param caminho caminho do arquivo binario
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public void escritaRecursos(List<Recurso> recurso, String caminho) throws FileNotFoundException, IOException {
+        ObjectOutputStream outputStream;
+
+        outputStream = new ObjectOutputStream(new FileOutputStream(caminho, false));
+
+        outputStream.writeObject(recurso);
+
+        outputStream.close();           
+    }
     
     /**
      * @param caminho
-     * @return vetor com a informações concatenadas
+     * @return a lista de objetos armazenada no arquivo binario
      */
-    public List<String> manipuladorLeitura(String caminho) {  
-        
-        List<String> listArquivo = new ArrayList<String>();     
-        try {  
+    public ArrayList<Recurso> leituraRecurso(String caminho) {  
 
-            BufferedReader leitor = 
-                new BufferedReader(new FileReader(new File(caminho)));
-            
-            while (leitor.ready()) {
-                listArquivo.add(leitor.readLine());
-            } 
+        ArrayList<Recurso> listArquivo = new ArrayList<Recurso>(); 
+        ObjectInputStream oInputStream = null;
 
-            leitor.close();  
+        try { 
 
-        } catch (IOException erro){
-            System.out.println("Você precisa fazer alguma entrada para consultar");
+            oInputStream = new ObjectInputStream(new FileInputStream(caminho));
+
+            listArquivo = (ArrayList) oInputStream.readObject();
+
+            oInputStream.close();
+
+        } catch ( ClassNotFoundException erro){
+            erro.printStackTrace();
+        } catch (EOFException eofException){ 
+            eofException.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
         }
+        
+        //Retorna um arrayList com as linhas de informação
+        return listArquivo;     
+    }
+//Recurso
 
+//Licenças Obtidas
+    /**
+     * Metodo que salva os objetos em arquivo binario
+     * @param licencasObtidas lista de objetos de do tipo licencasObtidas
+     * @param caminho caminho do arquivo binario
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public void escritaLicencaObtida(List<LicencasObtidas> licencasObtidas, String caminho) throws FileNotFoundException, IOException {
+        ObjectOutputStream outputStream;
+
+        outputStream = new ObjectOutputStream(new FileOutputStream(caminho, false));
+
+        outputStream.writeObject(licencasObtidas);
+
+        outputStream.close();       
+    }
+   
+    /**
+     * @param caminho
+     * @return a lista de objetos armazenada no arquivo binario
+     */
+    public ArrayList<LicencasObtidas> leituraLicencaObtida(String caminho) {  
+
+        ArrayList<LicencasObtidas> listArquivo = new ArrayList<LicencasObtidas>(); 
+        ObjectInputStream oInputStream = null;
+
+        try { 
+
+            oInputStream = new ObjectInputStream(new FileInputStream(caminho));
+
+            listArquivo = (ArrayList) oInputStream.readObject();
+
+            oInputStream.close();
+
+        } catch ( ClassNotFoundException erro){
+            erro.printStackTrace();
+        } catch (EOFException eofException){ 
+            eofException.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        
         //Retorna um arrayList com as linhas de informação
         return listArquivo;   
     }
+//Licenças Obtidas
 
+//Licenças Necessarias
     /**
-     * Metodo salva as informações do formulario em um arquivo txt
-     * 
-     * @param informacoes campos do cadastro concatenados por ;
-     * @param caminho local do arquivo com extensão .txt
+     * Metodo que salva os objetos em arquivo binario
+     * @param licencasNecessarias lista de objetos de do tipo licencasNecessarias
+     * @param caminho caminho do arquivo binario
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public void manipuladorEscritaRecursos(List<Recurso> recurso, String caminho) throws FileNotFoundException, IOException {
-        FileWriter escritor = new FileWriter(caminho); 
-        for(Recurso str: recurso) {
-            escritor.write(
-                str.getRecursoNome() + ";" + 
-                str.getRecursoEmail() + ";" +  
-                str.getRecursoProjeto() + 
-                System.lineSeparator()
-            );
-        }
-        escritor.close();
+    public void escritaLicencaNecessarias(List<LicencasNecessarias> licencasNecessarias, String caminho) throws FileNotFoundException, IOException {
+        ObjectOutputStream outputStream;
 
-        /*/List<Recurso> listRecursosArquivo = new ArrayList<Recurso>();
-        StringBuffer sb = new StringBuffer();
-        Iterator<Recurso> it = recurso.iterator();
-        while(it.hasNext()){
-            sb.append(it.next());
-            sb.append(";");
-        }
+        outputStream = new ObjectOutputStream(new FileOutputStream(caminho, false));
 
-        BufferedWriter bw = new BufferedWriter(new FileWriter(caminho));
-        bw.write(sb.toString());
-        bw.flush();
-        bw.close();*/
-        
+        outputStream.writeObject(licencasNecessarias);
 
-        //Metodo 2 para armazenar dados
-        /*BufferedWriter fileWriter = null;
-        try {
-            fileWriter = new BufferedWriter(new FileWriter(new File(caminho), true));
-            fileWriter.write(informacoes);
-            fileWriter.newLine();
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (FileNotFoundException erro) {
-            System.err.println("Arquivo não encontrado.");
-        } catch (IOException erro) {
+        outputStream.close();       
+    }
+    
+    /**
+     * @param caminho
+     * @return a lista de objetos armazenada no arquivo binario
+     */
+    public List<LicencasNecessarias> leituraLicencaNecessarias(String caminho) {  
+
+        ArrayList<LicencasNecessarias> listArquivo = new ArrayList<LicencasNecessarias>(); 
+        ObjectInputStream oInputStream = null;
+
+        try { 
+
+            oInputStream = new ObjectInputStream(new FileInputStream(caminho));
+
+            listArquivo = (ArrayList) oInputStream.readObject();
+
+            oInputStream.close();
+
+        } catch ( ClassNotFoundException erro){
             erro.printStackTrace();
-        }*/
-
-        /* //Maneira 1 de fazer a criação do arquivo caso não exista, colocar texto em cada linha
-        File entrada = new File(caminho);
-        FileWriter escritor = new FileWriter(entrada, true);
-        escritor.write(informacoes);
-        escritor.write(System.getProperty( "line.separator" ));
-        escritor.flush();
-        escritor.close();*/
+        } catch (EOFException eofException){ 
+            eofException.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        //Retorna um arrayList com as linhas de informação
+        return listArquivo;   
     }
+//Licenças Necessarias
 
+//Projeto
     /**
-     * Metodo salva as informações do formulario em um arquivo txt
-     * 
-     * @param informacoes campos do cadastro concatenados por ;
-     * @param caminho local do arquivo com extensão .txt
+     * Metodo que salva os objetos em arquivo binario
+     * @param projetos lista de objetos de do tipo projeto
+     * @param caminho caminho do arquivo binario
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public void manipuladorEscritaLicencaObtida(List<LicencasObtidas> licencasObtidas, String caminho) throws FileNotFoundException, IOException {
-        FileWriter escritor = new FileWriter(caminho); 
-        for(LicencasObtidas item : licencasObtidas) {
-            escritor.write(
-                item.getDataConclusao() + ";" + 
-                item.getLicencasObtidasRecursoEmail() + ";" +  
-                item.getLicencasObtidasTreinamentoNome() + 
-                System.lineSeparator()
-            );
-        }
-        escritor.close();        
+    public void escritaProjetos(List<Projeto> projetos, String caminho) throws FileNotFoundException, IOException {
+        ObjectOutputStream outputStream;
+
+        outputStream = new ObjectOutputStream(new FileOutputStream(caminho, false));
+
+        outputStream.writeObject(projetos);
+
+        outputStream.close();       
     }
 
     /**
-     * Metodo salva as informações do formulario em um arquivo txt
-     * 
-     * @param informacoes campos do cadastro concatenados por ;
-     * @param caminho local do arquivo com extensão .txt
-     * @throws FileNotFoundException
-     * @throws IOException
+     * @param caminho
+     * @return a lista de objetos armazenada no arquivo binario
      */
-    public void manipuladorEscritaProjetos(List<Projeto> projetos, String caminho) throws FileNotFoundException, IOException {
-        FileWriter escritor = new FileWriter(caminho); 
-        for(Projeto item : projetos) {
-            escritor.write(
-                item.getProjetoNome() + ";" + 
-                item.getProjetoTecnologia() + ";" +  
-                item.getProjetoValor() + 
-                System.lineSeparator()
-            );
-        }
-        escritor.close();        
-    }
+    public ArrayList<Projeto> leituraProjetos(String caminho) {  
 
-    /**
-     * Metodo salva as informações do formulario em um arquivo txt
-     * 
-     * @param informacoes campos do cadastro concatenados por ;
-     * @param caminho local do arquivo com extensão .txt
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public void manipuladorEscritaLicencaNecessarias(List<LicencasNecessarias> licencasNecessarias, String caminho) throws FileNotFoundException, IOException {
-        FileWriter escritor = new FileWriter(caminho); 
-        for(LicencasNecessarias item : licencasNecessarias) {
-            escritor.write(
-                item.getTreinamentoNome() + ";" + 
-                item.getTreinamentoLink() + ";" +  
-                item.getTreinamentoCategoria() + ";" + 
-                item.getTreinamentoLevel() + 
-                System.lineSeparator()
-            );
-        }
-        escritor.close();        
-    }
+        ArrayList<Projeto> listArquivo = new ArrayList<Projeto>(); 
+        ObjectInputStream oInputStream = null;
 
+        try { 
+
+            oInputStream = new ObjectInputStream(new FileInputStream(caminho));
+
+            listArquivo = (ArrayList) oInputStream.readObject();
+
+            oInputStream.close();
+
+        } catch ( ClassNotFoundException erro){
+            erro.printStackTrace();
+        } catch (EOFException eofException){ 
+            eofException.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        //Retorna um arrayList com as linhas de informação
+        return listArquivo;   
+    }
+//Projeto
 }

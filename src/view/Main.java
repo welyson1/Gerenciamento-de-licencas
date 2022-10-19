@@ -15,6 +15,6 @@ public class Main extends Application{
         Parent root = FXMLLoader.load(getClass().getResource("../view/tela.fxml"));
         primaryStage.setTitle("Controle de licenças para trabalho");
         primaryStage.setScene(new Scene(root));
-        primaryStage.show();        
+        primaryStage.show();   
     }
 }

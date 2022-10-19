@@ -1,6 +1,8 @@
 package model;
 
-public class LicencasObtidas {
+import java.io.Serializable;
+
+public class LicencasObtidas implements Serializable{
     String licencasObtidasRecursoEmail = "";
     String licencasObtidasTreinamentoNome = "";
     String dataConclusao = "";
