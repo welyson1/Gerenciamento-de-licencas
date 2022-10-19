@@ -7,10 +7,50 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import view.Conexao;
+
 public class ManipuladorArquivo{
+    Conexao conexao = new Conexao();
+
+    /**
+     * Metodo que trabalha com a query de inserção no banco de dados
+     */
+    public void inserirBancoDeDados() {
+        //Query para inserir os dados
+        String sql = "INSERT into recursos (nome, email, projeto) values('Welyson', 'welyso1n@gmail.com', 'CLARO RAN')";
+
+        int res = conexao.executaSQL(sql);
+
+        if (res>0) {
+            System.out.println("Inserido no banco");
+        }
+    }
+
+
+    public void buscaBancoDeDados() {
+        //Query para consultar a tabela no banco de dados
+        String sql = "SELECT * from recursos";
+
+        ResultSet res = conexao.consultaBancoDeDados(sql);
+
+        try {
+            while (res.next()) {
+                String nome = res.getString("nome");
+                String email = res.getString("email");
+                String projeto = res.getString("projeto");
+
+                System.out.println(nome+ " - " +email+" - " +projeto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 //Recurso
     /**
      * Metodo que salva os objetos em arquivo binario

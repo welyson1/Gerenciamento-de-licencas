@@ -21,6 +21,7 @@ import model.LicencasObtidas;
 import model.ManipuladorArquivo;
 import model.Projeto;
 import model.Recurso;
+import view.Conexao;
 
 public class Controller implements Initializable, Serializable{
     
@@ -85,7 +86,8 @@ public class Controller implements Initializable, Serializable{
     @FXML
     private TableColumn<Recurso, String> tableviewColunaProjeto;
 
-//-------------------------------------------------------------
+//------------------------------------------------------------
+
     //Instanciação do objeto que faz manipulações no arquivo de texto
     ManipuladorArquivo manipuladorArquivo = new ManipuladorArquivo(); 
 
@@ -156,6 +158,10 @@ public class Controller implements Initializable, Serializable{
         
         //Limpar campos do formulario
         limparCamposRecurso();
+
+//Metodos para teste do banco de dados **********************************************************************
+        manipuladorArquivo.inserirBancoDeDados();
+        manipuladorArquivo.buscaBancoDeDados();
     }
     //Metodo exclui o item e salva em um arquivo .txt
     @FXML
