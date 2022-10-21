@@ -56,7 +56,7 @@ public class Conexao {
 
 /**
  * Tasks:
- *  Fazer uma colona ID para as tabelas.
+ *  Fazer uma coluna ID para as tabelas.
  *  Criar as tabelas
  *  Setar o ID como primaryKey
  */

@@ -21,7 +21,7 @@ public class ManipuladorArquivo{
      */
     public void inserirBancoDeDados() {
         //Query para inserir os dados
-        String sql = "INSERT into recursos (nome, email, projeto) values('Welyson', 'welyso1n@gmail.com', 'CLARO RAN')";
+        String sql = "INSERT into recurso (recurso_nome, recurso_email, recurso_projeto) values('Welyson', 'welyso1n@gmail.com', 'CLARO RAN')";
 
         int res = conexao.executaSQL(sql);
 
@@ -30,18 +30,18 @@ public class ManipuladorArquivo{
         }
     }
 
-
     public void buscaBancoDeDados() {
         //Query para consultar a tabela no banco de dados
-        String sql = "SELECT * from recursos";
+        String sql = "SELECT * from recurso";
 
         ResultSet res = conexao.consultaBancoDeDados(sql);
 
+        //Pegando todos os valores do banco de dados
         try {
             while (res.next()) {
-                String nome = res.getString("nome");
-                String email = res.getString("email");
-                String projeto = res.getString("projeto");
+                String nome = res.getString("recurso_nome");
+                String email = res.getString("recurso_email");
+                String projeto = res.getString("recurso_projeto");
 
                 System.out.println(nome+ " - " +email+" - " +projeto);
             }
