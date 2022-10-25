@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.StringTokenizer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -84,22 +83,24 @@ public class Controller implements Initializable, Serializable{
     private TableView<Recurso> tableViewRecursos;
     @FXML
     private TableColumn<Recurso, String> tableviewColunaProjeto;
+    @FXML
+    private TextField entradaBuscadorRecurso;
+    @FXML
+    private TextField entradaBuscalNecessarias;
+    @FXML
+    private TextField entradaBuscalObtidas;
+    @FXML
+    private TextField entradaBuscaProjeto;
 
 //-------------------------------------------------------------
     //Instanciação do objeto que faz manipulações no arquivo de texto
     ManipuladorArquivo manipuladorArquivo = new ManipuladorArquivo(); 
-
     
-    String caminhoDataRecursos = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/Recursos.txt";
-    String caminhoDataLicencasObtidas = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/LicencasObtidas.txt";
-    String caminhoDataLicencasNecessarias = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/LicencasNecessarias.txt";
-    String caminhoDataProjetos = "C:/Users/wcarlos/Documents/GitHub/atividadePratica01/dataBase/Projetos.txt";
-    /*
-    String caminhoDataRecursos = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/Recursos.txt";
-    String caminhoDataLicencasObtidas = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/LicencasObtidas.txt";
-    String caminhoDataLicencasNecessarias = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/LicencasNecessarias.txt";
-    String caminhoDataProjetos = "C:/Users/404/Documents/jAVA/atividadePratica01/dataBase/Projetos.txt";
-    */
+    //Caminho relativo dos arquivos
+    String caminhoDataRecursos = "./dataBase/Recursos.txt";
+    String caminhoDataLicencasObtidas = "./dataBase/LicencasObtidas.txt";
+    String caminhoDataLicencasNecessarias = "./dataBase/LicencasNecessarias.txt";
+    String caminhoDataProjetos = "./dataBase/Projetos.txt";
 //-------------------------------------------------------------  
 
     //Declaração de arrayList
@@ -157,7 +158,11 @@ public class Controller implements Initializable, Serializable{
         //Limpar campos do formulario
         limparCamposRecurso();
     }
-    //Metodo exclui o item e salva em um arquivo .txt
+    
+    /**
+     * Metodo chamado ao clicar no botão excluir na interface do usuario.
+     * Tem como ação a exclusão do registro no arrayList e posteriormente no arquivo binario
+     */
     @FXML
     public void excluirRecurso() throws FileNotFoundException, IOException {
         //Passando o item selecionado para variavel
@@ -174,7 +179,10 @@ public class Controller implements Initializable, Serializable{
         
         limparCamposRecurso();
     }
-    //Metodo salva em um arquivo txt ao ser acionado
+    /**
+     * Metodo chamado ao clicar no botão salvar na interface do usuario.
+     * Tem como ação a modificação dos valores das variais do objeto do arrayLidt, e posteriormente no arquivo binario
+     */
     @FXML
     void salvarRecurso(ActionEvent event) throws FileNotFoundException, IOException {        
         editarRecurso();  
@@ -188,6 +196,28 @@ public class Controller implements Initializable, Serializable{
         limparCamposRecurso();
     }
     
+    /**
+     * Metodo chamado ao clicar no botão busca na interface do usuario  
+     */
+    @FXML
+    void buscarRecurso(ActionEvent event) {
+        //Variavel para armazenar o id do objeto selecionado
+        int idSelecao = 0;
+
+        //Procura id do objeto na lista para fazer alteração
+        for (int i = 0; i < listRecursos.size(); i++){
+            //Condicional
+            if (listRecursos.get(i).getRecursoEmail().equals(entradaBuscadorRecurso.getText())){
+                idSelecao = i;             
+            }
+        }
+
+        //Atribui os valores do objeto aos campos do formulario na interface
+        entradaNome.setText(listRecursos.get(idSelecao).getRecursoNome());
+        entradaEmail.setText(listRecursos.get(idSelecao).getRecursoEmail());
+        entradaProjeto.setText(listRecursos.get(idSelecao).getRecursoProjeto());
+    }
+
     /**
      * O recursoSelecionado pega o item selecionado pelo usuario e coloca os valores nos campos da interface
      * @param recurso selecionado pelo usuario na tablewView
@@ -281,7 +311,11 @@ public class Controller implements Initializable, Serializable{
         //Limpar campos do formulario
         limparCamposLicencasObtidas();
     }
-    //Metodo exclui o item e salva em um arquivo .txt
+    
+    /**
+     * Metodo chamado ao clicar no botão excluir na interface do usuario.
+     * Tem como ação a exclusão do registro no arrayList e posteriormente no arquivo binario
+     */
     @FXML
     void excluirLicencaObtida(ActionEvent event) throws FileNotFoundException, IOException {
         //Passando o item selecionado para variavel
@@ -297,7 +331,11 @@ public class Controller implements Initializable, Serializable{
         
         limparCamposLicencasObtidas();
     }
-    //Metodo salva em um arquivo txt ao ser acionado
+        
+    /**
+     * Metodo chamado ao clicar no botão salvar na interface do usuario.
+     * Tem como ação a modificação dos valores das variais do objeto do arrayLidt, e posteriormente no arquivo binario
+     */
     @FXML
     void salvarLicencasObtidas(ActionEvent event) throws FileNotFoundException, IOException {
         editarLicencaObtida();
@@ -308,6 +346,28 @@ public class Controller implements Initializable, Serializable{
 
         limparCamposLicencasObtidas();
     }
+    /**
+     * Metodo chamado ao clicar no botão busca na interface do usuario  
+     */
+    @FXML
+    void buscalObtidas(ActionEvent event) {
+        //Variavel para armazenar o id do objeto selecionado
+        int idSelecao = 0;
+
+        //Procura id do objeto na lista para fazer alteração
+        for (int i = 0; i < listLicencasObtidas.size(); i++){
+            //Condicional
+            if (listLicencasObtidas.get(i).getLicencasObtidasRecursoEmail().equals(entradaBuscalObtidas.getText())){
+                idSelecao = i;      
+            }
+        }
+
+        //Atribui os valores do objeto aos campos do formulario na interface
+        entradaEmailRecursoLicencaObtida.setText(listLicencasObtidas.get(idSelecao).getLicencasObtidasRecursoEmail());
+        entradaNomeLicencaObtida.setText(listLicencasObtidas.get(idSelecao).getLicencasObtidasTreinamentoNome());
+        entradaDataLicencaObtida.setText(listLicencasObtidas.get(idSelecao).getDataConclusao());
+    }
+
     /**
      * O recursoSelecionado pega o item selecionado pelo usuario e coloca os valores nos campos da interface
      * @param recurso selecionado pelo usuario na tablewView
@@ -400,6 +460,11 @@ public class Controller implements Initializable, Serializable{
         //Limpar campos do formulario
         limparCamposLicencasNecessarias();
     }
+    
+    /**
+     * Metodo chamado ao clicar no botão excluir na interface do usuario.
+     * Tem como ação a exclusão do registro no arrayList e posteriormente no arquivo binario
+     */
     @FXML
     void excluirLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
         //Passando o item selecionado para variavel
@@ -413,6 +478,11 @@ public class Controller implements Initializable, Serializable{
         //Atualização da lista no arquivo
         manipuladorArquivo.escritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
     }
+    
+    /**
+     * Metodo chamado ao clicar no botão salvar na interface do usuario.
+     * Tem como ação a modificação dos valores das variais do objeto do arrayLidt, e posteriormente no arquivo binario
+     */
     @FXML
     void salvarLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
         editarLicencasNecessarias();
@@ -424,7 +494,29 @@ public class Controller implements Initializable, Serializable{
 
         limparCamposLicencasNecessarias();
     }
-    
+    /**
+     * Metodo chamado ao clicar no botão busca na interface do usuario  
+     */
+    @FXML
+    void buscarlNecessarias(ActionEvent event) {
+        //Variavel para armazenar o id do objeto selecionado
+        int idSelecao = 0;
+
+        //Procura id do objeto na lista para fazer alteração
+        for (int i = 0; i < listLicencasNecessarias.size(); i++){
+            //Condicional
+            if (listLicencasNecessarias.get(i).getTreinamentoNome().equals(entradaBuscaProjeto.getText())){
+                idSelecao = i;      
+            }
+        }
+
+        //Atribui os valores do objeto aos campos do formulario na interface
+        entradaNomeLicencaNecessaria.setText(listLicencasNecessarias.get(idSelecao).getTreinamentoNome());
+        entrataLinkLicencaNecessaria.setText(listLicencasNecessarias.get(idSelecao).getTreinamentoLink());
+        entrataCategoriaLicencaNecessaria.setText(listLicencasNecessarias.get(idSelecao).getTreinamentoCategoria());
+        entrataLevelLicencaNecessaria.setText(listLicencasNecessarias.get(idSelecao).getTreinamentoLevel());
+    }
+
     /**
      * O recursoSelecionado pega o item selecionado pelo usuario e coloca os valores nos campos da interface
      * @param licencasNecessarias selecionado pelo usuario na tablewView
@@ -506,6 +598,9 @@ public class Controller implements Initializable, Serializable{
 
 //======================Projetos===============================
 //-------------------------------------------------------------
+    /**
+     * Metodo chamado ao clicar no botão cadastrar na interface do usuario  
+     */
     @FXML
     void cadastrarProjeto(ActionEvent event) throws FileNotFoundException, IOException {
         //Instancia do recurso
@@ -521,7 +616,11 @@ public class Controller implements Initializable, Serializable{
         //Limpar campos do formulario
         limparCamposProjeto();
     }
-    //Metodo exclui o item e salva em um arquivo .txt
+    
+    /**
+     * Metodo chamado ao clicar no botão excluir na interface do usuario.
+     * Tem como ação a exclusão do registro no arrayList e posteriormente no arquivo binario
+     */
     @FXML
     void excluirProjeto(ActionEvent event) throws FileNotFoundException, IOException {
         //Passando o item selecionado para variavel
@@ -538,7 +637,10 @@ public class Controller implements Initializable, Serializable{
         limparCamposProjeto();
     }
 
-    //Metodo salva em um arquivo txt ao ser acionado
+    /**
+     * Metodo chamado ao clicar no botão salvar na interface do usuario.
+     * Tem como ação a modificação dos valores das variais do objeto do arrayLidt, e posteriormente no arquivo binario
+     */
     @FXML
     void salvarProjeto(ActionEvent event) throws FileNotFoundException, IOException {
         editarProjeto();
@@ -548,6 +650,28 @@ public class Controller implements Initializable, Serializable{
         manipuladorArquivo.escritaProjetos(listProjetos, caminhoDataProjetos);
 
         limparCamposProjeto();
+    }
+
+    /**
+     * Metodo chamado ao clicar no botão busca na interface do usuario  
+     */
+    @FXML
+    void buscarProjeto(ActionEvent event) {
+        //Variavel para armazenar o id do objeto selecionado
+        int idSelecao = 0;
+
+        //Procura id do objeto na lista para fazer alteração
+        for (int i = 0; i < listProjetos.size(); i++){
+            //Condicional
+            if (listProjetos.get(i).getProjetoNome().equals(entradaBuscaProjeto.getText())){
+                idSelecao = i;      
+            }
+        }
+
+        //Atribui os valores do objeto aos campos do formulario na interface
+        entradaNomeProjeto.setText(listProjetos.get(idSelecao).getProjetoNome());
+        entradaTecnologia.setText(listProjetos.get(idSelecao).getProjetoTecnologia());
+        entradaValor.setText(listProjetos.get(idSelecao).getProjetoValor());
     }
 
     /**
