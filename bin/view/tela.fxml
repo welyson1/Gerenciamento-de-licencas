@@ -6,6 +6,7 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -55,6 +56,17 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" minWidth="300.0" spacing="5.0">
                            <children>
+                              <VBox alignment="CENTER_LEFT">
+                                 <children>
+                                    <Label text="Coloque o email para buscar" />
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                       <children>
+                                          <TextField fx:id="entradaBuscadorRecurso" minWidth="250.0" promptText="Digite aqui..." />
+                                          <Button fx:id="btnBuscarRecurso" mnemonicParsing="false" onAction="#buscarRecurso" text="Buscar" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                               <TableView fx:id="tableViewRecursos" prefHeight="200.0" prefWidth="200.0">
                                 <columns>
                                   <TableColumn fx:id="tableViewColunaNome" prefWidth="75.0" text="Nome" />
@@ -116,6 +128,17 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" minWidth="300.0" spacing="5.0">
                            <children>
+                              <VBox alignment="CENTER_LEFT">
+                                 <children>
+                                    <Label text="Coloque o email para buscar" />
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                       <children>
+                                          <TextField fx:id="entradaBuscalObtidas" minWidth="250.0" promptText="Digite aqui..." />
+                                          <Button mnemonicParsing="false" onAction="#buscalObtidas" text="Buscar" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                               <TableView fx:id="tableViewLicencasObtidas" prefHeight="200.0" prefWidth="200.0">
                                  <columns>
                                     <TableColumn fx:id="tableViewColunaEmailLicencasObtidas" prefWidth="88.0" text="Email" />
@@ -182,6 +205,17 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" minWidth="300.0" spacing="5.0">
                            <children>
+                              <VBox alignment="CENTER_LEFT">
+                                 <children>
+                                    <Label text="Coloque o nome para buscar" />
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                       <children>
+                                          <TextField fx:id="entradaBuscalNecessarias" minWidth="250.0" promptText="Digite aqui..." />
+                                          <Button mnemonicParsing="false" onAction="#buscarlNecessarias" text="Buscar" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                               <TableView fx:id="tableViewLicencaNecessarias" prefHeight="200.0" prefWidth="200.0">
                                  <columns>
                                     <TableColumn fx:id="tableViewColunaNomeLicencasNecessarias" prefWidth="75.0" text="Nome" />
@@ -245,6 +279,17 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" minWidth="300.0" spacing="5.0">
                            <children>
+                              <VBox alignment="CENTER_LEFT">
+                                 <children>
+                                    <Label text="Coloque o nome para buscar" />
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                       <children>
+                                          <TextField fx:id="entradaBuscaProjeto" minWidth="250.0" promptText="Digite aqui..." />
+                                          <Button mnemonicParsing="false" onAction="#buscarProjeto" text="Buscar" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                               <TableView fx:id="tableViewProjeto" prefHeight="200.0" prefWidth="200.0">
                                  <columns>
                                     <TableColumn fx:id="tableViewColunaNomeProjeto" prefWidth="75.0" text="Nome" />
