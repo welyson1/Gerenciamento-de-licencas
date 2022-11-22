@@ -6,6 +6,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import DAO.LicencasNecessariasDAO;
+import DAO.LicencasObtidasDAO;
+import DAO.ProjetoDAO;
+import DAO.RecursosDAO;
+import JDBC.Conexao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,7 +26,6 @@ import model.LicencasObtidas;
 import model.ManipuladorArquivo;
 import model.Projeto;
 import model.Recurso;
-import view.Conexao;
 
 public class Controller implements Initializable, Serializable{
     
@@ -131,7 +136,7 @@ public class Controller implements Initializable, Serializable{
         );
 
         //Metodo chamado para iniciar com a lista carregada as informações do arquivo .txt        
-        carregarRecursoNoArray();
+        PreencherTableViewRecursos();
         carregarLicencasObtidasNoArray();
         carregarProjetoNoArray();
         carregarLicencasNecessariaNoArray();
@@ -139,49 +144,43 @@ public class Controller implements Initializable, Serializable{
 //======================Recurso================================
 //-------------------------------------------------------------    
     @FXML
-    void cadastrarRecurso(ActionEvent event) throws FileNotFoundException, IOException {         
+    void cadastrarRecurso(ActionEvent event) throws FileNotFoundException, IOException {
         //Instancia do recurso
         Recurso recurso = new Recurso(entradaNome.getText(), entradaEmail.getText(), entradaProjeto.getText());
-          
-        //Adição no arrayList
-        listRecursos.add(recurso);
-        tableViewRecursos();
-
-        //Salvar no arquivo de texto a cada cadastro
-        manipuladorArquivo.escritaRecursos(listRecursos, caminhoDataRecursos);    
+                
+        //Teste com banco de dados----------------------------------------------------------------------------------
+        RecursosDAO recursosDAO = new RecursosDAO();
+        recursosDAO.addRecurso(recurso);
         
         //Limpar campos do formulario
         limparCamposRecurso();
 
-//Metodos para teste do banco de dados **********************************************************************
-        manipuladorArquivo.inserirBancoDeDados();
-        manipuladorArquivo.buscaBancoDeDados();
+        PreencherTableViewRecursos();
+
     }
-    //Metodo exclui o item e salva em um arquivo .txt
+    //Metodo exclui o item
     @FXML
     public void excluirRecurso() throws FileNotFoundException, IOException {
         //Passando o item selecionado para variavel
         Recurso recursoRemover = tableViewRecursos.getSelectionModel().getSelectedItem();
-        //Log
-        System.out.println("Recurso removido" + recursoRemover.getRecursoNome());
+        
+        //Teste com banco de dados----------------------------------------------------------------------------------
+        RecursosDAO recursosDAO = new RecursosDAO();
+        recursosDAO.excluirRecursos(recursoRemover);
+
         //Remoção do recurso
         tableViewRecursos.getItems().remove(recursoRemover);
-        //Remoção do ArrayList
-        listRecursos.remove(recursoRemover);
-        
-        //Atualização da lista no arquivo
-        manipuladorArquivo.escritaRecursos(listRecursos, caminhoDataRecursos);
-        
+                
         limparCamposRecurso();
     }
     //Metodo salva em um arquivo txt ao ser acionado
     @FXML
-    void salvarRecurso(ActionEvent event) throws FileNotFoundException, IOException {        
+    void salvarRecurso(ActionEvent event) throws FileNotFoundException, IOException {
         editarRecurso();  
 
         //Atualização do tablewView do recurso
         tableViewRecursos.refresh();
-
+        
         //Atualização da lista no arquivo
         manipuladorArquivo.escritaRecursos(listRecursos, caminhoDataRecursos);
 
@@ -205,49 +204,34 @@ public class Controller implements Initializable, Serializable{
      * Metodo edita o recurso com com as novas informações dos campos inseridas pelo usuario
      */
     public void editarRecurso() {
-        //Variavel para armazenar o id do objeto selecionado
-        int idSelecao = 0;
-
         //Passando o item selecionado para variavel
-        Recurso recursoEditar = tableViewRecursos.getSelectionModel().getSelectedItem();    
+        Recurso recursoEditado = tableViewRecursos.getSelectionModel().getSelectedItem();   
 
-        //Procura id do objeto na lista para fazer alteração
-        for (int i = 0; i < listRecursos.size(); i++){
-            if (listRecursos.get(i).getRecursoEmail() == recursoEditar.getRecursoEmail()){
-                idSelecao = i;                
-            }
-        } 
-
+        //Guarda os valores para buscar ----------------------------------------------------------------------------
+        String emailBuscado = recursoEditado.getRecursoEmail();
+        
         //Coloca o texto dos campos nas variaveis do objeto
-        recursoEditar.setRecursoNome(entradaNome.getText());
-        recursoEditar.setRecursoEmail(entradaEmail.getText());
-        recursoEditar.setRecursoProjeto(entradaProjeto.getText());
+        recursoEditado.setRecursoNome(entradaNome.getText());
+        recursoEditado.setRecursoEmail(entradaEmail.getText());
+        recursoEditado.setRecursoProjeto(entradaProjeto.getText());
 
-        //Salva o objeto editado no objeto selecionado
-        listRecursos.set(idSelecao, recursoEditar);
+        //Teste com banco de dados----------------------------------------------------------------------------------
+        RecursosDAO recursosDAO = new RecursosDAO();
+        recursosDAO.updateRecursos(recursoEditado, emailBuscado);
+      
     }
-    
-    /**
-     * O carregarRecursoNoArray pega os objetos do arrayList e carrega no tableView da interface
-     */
-    public void carregarRecursoNoArray() {        
-
-        listRecursos = manipuladorArquivo.leituraRecurso(caminhoDataRecursos);
-
-        //Associa as variaveis nas colunas do tableView
-        tableViewRecursos();
-    }
-    
+     
     /**
      * O tableViewRecursos carrega os valores dos objetos nas colunas da tableView de recursos
      */
-    public void tableViewRecursos() {
+    public void PreencherTableViewRecursos() {
         //Associação das variaveis da classe com as probliedades da tabela 
         tableViewColunaNome.setCellValueFactory(new PropertyValueFactory<>("recursoNome"));
         tableViewColunaEmail.setCellValueFactory(new PropertyValueFactory<>("recursoEmail"));
         tableviewColunaProjeto.setCellValueFactory(new PropertyValueFactory<>("recursoProjeto"));           
         
-        observableList = FXCollections.observableArrayList(listRecursos);
+        RecursosDAO recursosDAO = new RecursosDAO();
+        observableList = FXCollections.observableArrayList(recursosDAO.getListRecursos());
 
         //Coloca os itens na lista
         tableViewRecursos.setItems(observableList); 
@@ -274,6 +258,10 @@ public class Controller implements Initializable, Serializable{
         //Adição no arrayList
         listLicencasObtidas.add(licencasObtidas);
         tableViewLicencasObtidas();
+
+        //Teste com banco de dados----------------------------------------------------------------------------------
+        LicencasObtidasDAO licencasObtidasDAO = new LicencasObtidasDAO();
+        licencasObtidasDAO.addLicensasObtidas(licencasObtidas);        
 
         //Salvar no arquivo de texto a cada cadastro
         manipuladorArquivo.escritaLicencaObtida(listLicencasObtidas, caminhoDataLicencasObtidas);     
@@ -393,6 +381,10 @@ public class Controller implements Initializable, Serializable{
         //Adição no arrayList
         listLicencasNecessarias.add(licencasNecessarias);
         tableViewLicencaNecessarias();
+
+        //Teste com banco de dados----------------------------------------------------------------------------------
+        LicencasNecessariasDAO licencasNecessariasDAO = new LicencasNecessariasDAO();
+        licencasNecessariasDAO.addLicensasNecessarias(licencasNecessarias);
 
         //Salvar no arquivo de texto a cada cadastro
         manipuladorArquivo.escritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
@@ -514,6 +506,10 @@ public class Controller implements Initializable, Serializable{
         //Adição no arrayList
         listProjetos.add(projeto);
         tableViewProjeto();
+
+        //Teste com banco de dados----------------------------------------------------------------------------------
+        ProjetoDAO projetoDAO = new ProjetoDAO();
+        projetoDAO.addProjeto(projeto);
 
         //Salvar no arquivo de texto a cada cadastro
         manipuladorArquivo.escritaProjetos(listProjetos, caminhoDataProjetos);

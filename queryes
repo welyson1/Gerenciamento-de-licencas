@@ -3,14 +3,14 @@ create table recurso(
 	recurso_nome varchar(100) not null,
 	recurso_email varchar(100) not null,
 	recurso_projeto varchar(50) default 'SEM PROJETO'	
-)
+);
 
 create table projeto(
 	id serial primary key,
 	projeto_nome varchar(100) not null,
 	projeto_tecnologia varchar(100) not null,
-	projeto_valor float default 0	
-)
+	projeto_valor varchar(50) default '0'
+);
 
 create table licencasNecessarias(
 	id serial primary key,
@@ -18,11 +18,11 @@ create table licencasNecessarias(
 	lnecessaria_link varchar(200) not null,
 	lnecessaria_categoria varchar(50),
 	lnecessaria_level varchar(10) not null	
-)
+);
 
 create table licencasObtidas(
 	id serial primary key,
 	lobtida_nome varchar(100) not null,
 	lobtida_recurso_email varchar(100) not null,
-	lobtida_conclusao date not null
+	lobtida_conclusao varchar(20) not null
 )

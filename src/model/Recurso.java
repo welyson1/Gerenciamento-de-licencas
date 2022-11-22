@@ -8,6 +8,7 @@ public class Recurso implements Serializable{
     String recursoProjeto = "";
 
     public Recurso() {
+        
     }
     public Recurso(String recursoNome, String recursoEmail, String recursoProjeto) {
         this.recursoNome = recursoNome;
@@ -34,5 +35,13 @@ public class Recurso implements Serializable{
     }
     public String readObject() {
         return null;
+    }
+
+    public void mostrarRecurso() {
+        System.out.println("------------------------------------");
+        System.out.println("Nome: "+ getRecursoNome());
+        System.out.println("E-mail: "+ getRecursoEmail());
+        System.out.println("Projeto: " + getRecursoProjeto());
+        
     }
 }

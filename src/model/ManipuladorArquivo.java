@@ -11,45 +11,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import view.Conexao;
+import JDBC.Conexao;
 
 public class ManipuladorArquivo{
     Conexao conexao = new Conexao();
-
-    /**
-     * Metodo que trabalha com a query de inserção no banco de dados
-     */
-    public void inserirBancoDeDados() {
-        //Query para inserir os dados
-        String sql = "INSERT into recurso (recurso_nome, recurso_email, recurso_projeto) values('Welyson', 'welyso1n@gmail.com', 'CLARO RAN')";
-
-        int res = conexao.executaSQL(sql);
-
-        if (res>0) {
-            System.out.println("Inserido no banco");
-        }
-    }
-
-    public void buscaBancoDeDados() {
-        //Query para consultar a tabela no banco de dados
-        String sql = "SELECT * from recurso";
-
-        ResultSet res = conexao.consultaBancoDeDados(sql);
-
-        //Pegando todos os valores do banco de dados
-        try {
-            while (res.next()) {
-                String nome = res.getString("recurso_nome");
-                String email = res.getString("recurso_email");
-                String projeto = res.getString("recurso_projeto");
-
-                System.out.println(nome+ " - " +email+" - " +projeto);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
 //Recurso
     /**
