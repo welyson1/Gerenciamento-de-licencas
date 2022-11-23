@@ -11,7 +11,6 @@ import DAO.LicencasNecessariasDAO;
 import DAO.LicencasObtidasDAO;
 import DAO.ProjetoDAO;
 import DAO.RecursosDAO;
-import JDBC.Conexao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -28,7 +27,7 @@ import model.Projeto;
 import model.Recurso;
 
 public class Controller implements Initializable, Serializable{
-    
+    //region Declaração de variaveis
     @FXML
     private TextField entradaEmail;
     @FXML
@@ -89,14 +88,20 @@ public class Controller implements Initializable, Serializable{
     private TableView<Recurso> tableViewRecursos;
     @FXML
     private TableColumn<Recurso, String> tableviewColunaProjeto;
-
+    @FXML
+    private TextField entradaBuscador;
+    @FXML
+    private TextField entradaBuscadorProjeto;
+    @FXML
+    private TextField entradaBuscadorlNecessaria;
+    @FXML
+    private TextField entradaBuscadorlObtidas;
+    //endregion
 //------------------------------------------------------------
 
     //Instanciação do objeto que faz manipulações no arquivo de texto
     ManipuladorArquivo manipuladorArquivo = new ManipuladorArquivo(); 
-
-    
-    String caminhoDataRecursos = "./dataBase/Recursos.txt";
+     
     String caminhoDataLicencasObtidas = "./dataBase/LicencasObtidas.txt";
     String caminhoDataLicencasNecessarias = "./dataBase/LicencasNecessarias.txt";
     String caminhoDataProjetos = "./dataBase/Projetos.txt";
@@ -179,14 +184,24 @@ public class Controller implements Initializable, Serializable{
         editarRecurso();  
 
         //Atualização do tablewView do recurso
-        tableViewRecursos.refresh();
-        
-        //Atualização da lista no arquivo
-        manipuladorArquivo.escritaRecursos(listRecursos, caminhoDataRecursos);
+        tableViewRecursos.refresh(); 
 
         limparCamposRecurso();
     }
-    
+    //Ação do botão para buscar
+    @FXML
+    void btnBuscadorEmail(ActionEvent event) {
+        Recurso recurso = new Recurso();
+        
+        //Teste com banco de dados----------------------------------------------------------------------------------
+        RecursosDAO recursosDAO = new RecursosDAO();        
+        recurso = recursosDAO.buscaRecurso(entradaBuscador.getText());
+
+        entradaNome.setText(recurso.getRecursoNome());
+        entradaEmail.setText(recurso.getRecursoEmail());
+        entradaProjeto.setText(recurso.getRecursoProjeto());
+    }
+
     /**
      * O recursoSelecionado pega o item selecionado pelo usuario e coloca os valores nos campos da interface
      * @param recurso selecionado pelo usuario na tablewView
@@ -523,7 +538,7 @@ public class Controller implements Initializable, Serializable{
         //Passando o item selecionado para variavel
         Projeto projetoRemover = tableViewProjeto.getSelectionModel().getSelectedItem();
         //Log
-        System.out.println("Recurso removido" + projetoRemover.getProjetoNome());
+        System.out.println("Recurso removido" + projetoRemover.setProjetoNome());
         //Remoção do recurso
         tableViewProjeto.getItems().remove(projetoRemover);
         //Remoção do ArrayList
@@ -553,7 +568,7 @@ public class Controller implements Initializable, Serializable{
     public void projetoSelecionado(Projeto projeto) {
         Projeto projetoEditar = tableViewProjeto.getSelectionModel().getSelectedItem();
 
-        entradaNomeProjeto.setText(projetoEditar.getProjetoNome());
+        entradaNomeProjeto.setText(projetoEditar.setProjetoNome());
         entradaTecnologia.setText(projetoEditar.getProjetoTecnologia());
         entradaValor.setText(projetoEditar.getProjetoValor());
     }
@@ -570,7 +585,7 @@ public class Controller implements Initializable, Serializable{
 
         //Procura id do objeto na lista para fazer alteração
         for (int i = 0; i < listProjetos.size(); i++){
-            if (listProjetos.get(i).getProjetoNome() == projetoEditar.getProjetoNome()){
+            if (listProjetos.get(i).setProjetoNome() == projetoEditar.setProjetoNome()){
                 idSelecao = i;                
             }
         } 
