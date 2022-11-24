@@ -17,10 +17,10 @@ public class Projeto implements Serializable{
         this.projetoValor = projetoValor;
     }
     
-    public String setProjetoNome() {
+    public String getProjetoNome() {
         return projetoNome;
     }
-    public void setProjetoNome(String projetoNome) {
+    public void getProjetoNome(String projetoNome) {
         this.projetoNome = projetoNome;
     }
     public String getProjetoTecnologia() {

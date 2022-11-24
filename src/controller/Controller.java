@@ -3,8 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import DAO.LicencasNecessariasDAO;
@@ -22,12 +20,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.LicencasNecessarias;
 import model.LicencasObtidas;
-import model.ManipuladorArquivo;
 import model.Projeto;
 import model.Recurso;
 
 public class Controller implements Initializable, Serializable{
-    //region Declaração de variaveis
+//region Declaração de variaveis
     @FXML
     private TextField entradaEmail;
     @FXML
@@ -96,30 +93,15 @@ public class Controller implements Initializable, Serializable{
     private TextField entradaBuscadorlNecessaria;
     @FXML
     private TextField entradaBuscadorlObtidas;
-    //endregion
-//------------------------------------------------------------
+ //endregion
 
-    //Instanciação do objeto que faz manipulações no arquivo de texto
-    ManipuladorArquivo manipuladorArquivo = new ManipuladorArquivo(); 
-     
-    String caminhoDataLicencasObtidas = "./dataBase/LicencasObtidas.txt";
-    String caminhoDataLicencasNecessarias = "./dataBase/LicencasNecessarias.txt";
-    String caminhoDataProjetos = "./dataBase/Projetos.txt";
-    
-//-------------------------------------------------------------  
-
-    //Declaração de arrayList
-    private List<Recurso> listRecursos = new ArrayList<Recurso>();
-    private List<LicencasObtidas> listLicencasObtidas = new ArrayList<LicencasObtidas>();
-    private List<Projeto> listProjetos = new ArrayList<Projeto>();
-    private List<LicencasNecessarias> listLicencasNecessarias = new ArrayList<LicencasNecessarias>();    
-    
-    //Declaração do observador
+//region Declaração do observador
     private ObservableList<Recurso> observableList;
     private ObservableList<LicencasObtidas> observableListLicencasObtidas;
     private ObservableList<Projeto> observablelistProjetos;
     private ObservableList<LicencasNecessarias> observablelistLicencasNecessarias;
-
+//endregion
+    
     @Override
     public void initialize(URL url, ResourceBundle rb){
         
@@ -141,26 +123,25 @@ public class Controller implements Initializable, Serializable{
         );
 
         //Metodo chamado para iniciar com a lista carregada as informações do arquivo .txt        
-        PreencherTableViewRecursos();
-        carregarLicencasObtidasNoArray();
-        carregarProjetoNoArray();
-        carregarLicencasNecessariaNoArray();
+        preencherTableViewRecursos();
+        preencherTableViewProjeto();
+        preencherTableViewLicencasObtidas();
+        preencherTableViewLicencaNecessarias();
     }
-//======================Recurso================================
-//-------------------------------------------------------------    
+
+//region Recurso
     @FXML
     void cadastrarRecurso(ActionEvent event) throws FileNotFoundException, IOException {
         //Instancia do recurso
         Recurso recurso = new Recurso(entradaNome.getText(), entradaEmail.getText(), entradaProjeto.getText());
-                
-        //Teste com banco de dados----------------------------------------------------------------------------------
+         
         RecursosDAO recursosDAO = new RecursosDAO();
         recursosDAO.addRecurso(recurso);
         
         //Limpar campos do formulario
         limparCamposRecurso();
 
-        PreencherTableViewRecursos();
+        preencherTableViewRecursos();
 
     }
     //Metodo exclui o item
@@ -168,8 +149,7 @@ public class Controller implements Initializable, Serializable{
     public void excluirRecurso() throws FileNotFoundException, IOException {
         //Passando o item selecionado para variavel
         Recurso recursoRemover = tableViewRecursos.getSelectionModel().getSelectedItem();
-        
-        //Teste com banco de dados----------------------------------------------------------------------------------
+                
         RecursosDAO recursosDAO = new RecursosDAO();
         recursosDAO.excluirRecursos(recursoRemover);
 
@@ -192,11 +172,13 @@ public class Controller implements Initializable, Serializable{
     @FXML
     void btnBuscadorEmail(ActionEvent event) {
         Recurso recurso = new Recurso();
-        
-        //Teste com banco de dados----------------------------------------------------------------------------------
-        RecursosDAO recursosDAO = new RecursosDAO();        
+
+        //Instanciação do objeto 
+        RecursosDAO recursosDAO = new RecursosDAO();  
+        //Busca do objeto pelo valor do campo de busca      
         recurso = recursosDAO.buscaRecurso(entradaBuscador.getText());
 
+        //Preenche os campos do form com as informações encontradas
         entradaNome.setText(recurso.getRecursoNome());
         entradaEmail.setText(recurso.getRecursoEmail());
         entradaProjeto.setText(recurso.getRecursoProjeto());
@@ -222,7 +204,7 @@ public class Controller implements Initializable, Serializable{
         //Passando o item selecionado para variavel
         Recurso recursoEditado = tableViewRecursos.getSelectionModel().getSelectedItem();   
 
-        //Guarda os valores para buscar ----------------------------------------------------------------------------
+        //Guarda o valor para buscar 
         String emailBuscado = recursoEditado.getRecursoEmail();
         
         //Coloca o texto dos campos nas variaveis do objeto
@@ -230,7 +212,7 @@ public class Controller implements Initializable, Serializable{
         recursoEditado.setRecursoEmail(entradaEmail.getText());
         recursoEditado.setRecursoProjeto(entradaProjeto.getText());
 
-        //Teste com banco de dados----------------------------------------------------------------------------------
+        //Teste com banco de dados
         RecursosDAO recursosDAO = new RecursosDAO();
         recursosDAO.updateRecursos(recursoEditado, emailBuscado);
       
@@ -239,7 +221,7 @@ public class Controller implements Initializable, Serializable{
     /**
      * O tableViewRecursos carrega os valores dos objetos nas colunas da tableView de recursos
      */
-    public void PreencherTableViewRecursos() {
+    public void preencherTableViewRecursos() {
         //Associação das variaveis da classe com as probliedades da tabela 
         tableViewColunaNome.setCellValueFactory(new PropertyValueFactory<>("recursoNome"));
         tableViewColunaEmail.setCellValueFactory(new PropertyValueFactory<>("recursoEmail"));
@@ -260,43 +242,35 @@ public class Controller implements Initializable, Serializable{
         entradaEmail.setText("");
         entradaProjeto.setText("");        
     }
-//======================Recurso================================
-//-------------------------------------------------------------
+//endregion
 
-//======================Licenças Obtidas===================
-//-------------------------------------------------------------
+//region Licenças Obtidas
     @FXML
     void cadastrorLicencaObtida(ActionEvent event) throws FileNotFoundException, IOException {
         //Instancia do recurso
         LicencasObtidas licencasObtidas = new LicencasObtidas(entradaEmailRecursoLicencaObtida.getText(),entradaNomeLicencaObtida.getText(),entradaDataLicencaObtida.getText());
- 
-        //Adição no arrayList
-        listLicencasObtidas.add(licencasObtidas);
-        tableViewLicencasObtidas();
-
-        //Teste com banco de dados----------------------------------------------------------------------------------
+         
+        //Cadastro no banco de dados
         LicencasObtidasDAO licencasObtidasDAO = new LicencasObtidasDAO();
         licencasObtidasDAO.addLicensasObtidas(licencasObtidas);        
-
-        //Salvar no arquivo de texto a cada cadastro
-        manipuladorArquivo.escritaLicencaObtida(listLicencasObtidas, caminhoDataLicencasObtidas);     
-
+  
         //Limpar campos do formulario
         limparCamposLicencasObtidas();
+
+        //Atualizar o tableView
+        preencherTableViewLicencasObtidas();
     }
     //Metodo exclui o item e salva em um arquivo .txt
     @FXML
     void excluirLicencaObtida(ActionEvent event) throws FileNotFoundException, IOException {
         //Passando o item selecionado para variavel
         LicencasObtidas licencasObtidasRemover = tableViewLicencasObtidas.getSelectionModel().getSelectedItem();
-        //Log
-        System.out.println("Recurso removido" + licencasObtidasRemover.getLicencasObtidasTreinamentoNome());
+            
+        LicencasObtidasDAO licencasObtidasDAO = new LicencasObtidasDAO();
+        licencasObtidasDAO.excluirLicencaObtida(licencasObtidasRemover); 
+
         //Remoção do recurso
         tableViewLicencasObtidas.getItems().remove(licencasObtidasRemover);
-        //Remoção do ArrayList
-        listLicencasObtidas.remove(licencasObtidasRemover);
-        //Atualização da lista no arquivo
-        manipuladorArquivo.escritaLicencaObtida(listLicencasObtidas, caminhoDataLicencasObtidas); 
         
         limparCamposLicencasObtidas();
     }
@@ -305,12 +279,25 @@ public class Controller implements Initializable, Serializable{
     void salvarLicencasObtidas(ActionEvent event) throws FileNotFoundException, IOException {
         editarLicencaObtida();
 
+        //Atualização do tablewView
         tableViewLicencasObtidas.refresh();
-
-        manipuladorArquivo.escritaLicencaObtida(listLicencasObtidas, caminhoDataLicencasObtidas); 
 
         limparCamposLicencasObtidas();
     }
+
+    @FXML
+    void btnBuscadorlObtidas(ActionEvent event) {
+        LicencasObtidas licencasObtidas = new LicencasObtidas();
+
+        LicencasObtidasDAO licencasObtidasDAO = new LicencasObtidasDAO();
+        licencasObtidas = licencasObtidasDAO.buscaLicencasObtidas(entradaBuscadorlObtidas.getText());
+
+        entradaEmailRecursoLicencaObtida.setText(licencasObtidas.getLicencasObtidasRecursoEmail());
+        entradaNomeLicencaObtida.setText(licencasObtidas.getLicencasObtidasTreinamentoNome());
+        entradaDataLicencaObtida.setText(licencasObtidas.getDataConclusao());
+    
+    }
+   
     /**
      * O recursoSelecionado pega o item selecionado pelo usuario e coloca os valores nos campos da interface
      * @param recurso selecionado pelo usuario na tablewView
@@ -322,54 +309,39 @@ public class Controller implements Initializable, Serializable{
         entradaEmailRecursoLicencaObtida.setText(licencasObtidasSelecionada.getLicencasObtidasRecursoEmail());
         entradaNomeLicencaObtida.setText(licencasObtidasSelecionada.getLicencasObtidasTreinamentoNome());
         entradaDataLicencaObtida.setText(licencasObtidasSelecionada.getDataConclusao());
+    
     }
 
     /**
      * Metodo edita o recurso com com as novas informações dos campos inseridas pelo usuario
      */
     public void editarLicencaObtida() {
-        //Variavel para armazenar o id do objeto selecionado
-        int idSelecao = 0;
-
         //Passando o item selecionado para variavel
-        LicencasObtidas licencasObtidasSelecionada = tableViewLicencasObtidas.getSelectionModel().getSelectedItem();
+        LicencasObtidas licencasObtidasEditado = tableViewLicencasObtidas.getSelectionModel().getSelectedItem();
 
-        //Procura id do objeto na lista para fazer alteração
-        for (int i = 0; i < listLicencasObtidas.size(); i++){
-            if (listLicencasObtidas.get(i).getLicencasObtidasRecursoEmail() == licencasObtidasSelecionada.getLicencasObtidasRecursoEmail()){
-                idSelecao = i;                
-            }
-        } 
+        //Guarda o valor para buscar
+        String emailBuscado = licencasObtidasEditado.getLicencasObtidasRecursoEmail();
 
         //Coloca o texto dos campos nas variaveis do objeto
-        licencasObtidasSelecionada.setLicencasObtidasRecursoEmail(entradaEmailRecursoLicencaObtida.getText());
-        licencasObtidasSelecionada.setLicencasObtidasTreinamentoNome(entradaNomeLicencaObtida.getText());
-        licencasObtidasSelecionada.setDataConclusao(entradaDataLicencaObtida.getText());
+        licencasObtidasEditado.setLicencasObtidasRecursoEmail(entradaEmailRecursoLicencaObtida.getText());
+        licencasObtidasEditado.setLicencasObtidasTreinamentoNome(entradaNomeLicencaObtida.getText());
+        licencasObtidasEditado.setDataConclusao(entradaDataLicencaObtida.getText());
 
-        //Salva o objeto editado no objeto selecionado
-        listLicencasObtidas.set(idSelecao, licencasObtidasSelecionada);
-    }
-
-    /**
-     * O carregarLicencasObtidasNoArray pega os objetos do arrayList e carrega no tableView da interface
-     */
-    public void carregarLicencasObtidasNoArray() {
-        listLicencasObtidas = manipuladorArquivo.leituraLicencaObtida(caminhoDataLicencasObtidas);
-
-        //Associa as variaveis nas colunas do tableView
-        tableViewLicencasObtidas();
+        LicencasObtidasDAO licencasObtidasDAO = new LicencasObtidasDAO();
+        licencasObtidasDAO.updateLicencaObtida(licencasObtidasEditado, emailBuscado);
     }
     
     /**
      * O tableViewRecursos carrega os valores dos objetos nas colunas da tableView de recursos
      */
-    public void tableViewLicencasObtidas() {
+    public void preencherTableViewLicencasObtidas() {
         //Associação das variaveis da classe com as probliedades da tabela 
         tableViewColunaEmailLicencasObtidas.setCellValueFactory(new PropertyValueFactory<>("licencasObtidasRecursoEmail"));          
         tableViewColunaLicencaLicencasObtidas.setCellValueFactory(new PropertyValueFactory<>("licencasObtidasTreinamentoNome"));          
         tableViewColunaDataLicencaObtida.setCellValueFactory(new PropertyValueFactory<>("dataConclusao")); 
 
-        observableListLicencasObtidas = FXCollections.observableArrayList(listLicencasObtidas);
+        LicencasObtidasDAO licencasObtidasDAO = new LicencasObtidasDAO();
+        observableListLicencasObtidas = FXCollections.observableArrayList(licencasObtidasDAO.getListLicencaObtida());
 
         //Coloca os itens na lista
         tableViewLicencasObtidas.setItems(observableListLicencasObtidas); 
@@ -383,42 +355,35 @@ public class Controller implements Initializable, Serializable{
         entradaNomeLicencaObtida.setText("");
         entradaDataLicencaObtida.setText("");
     }
-//======================Licenças Obtidas===================
-//-------------------------------------------------------------
+//endregion
 
-//======================Licencas Necessarias====================
-//-------------------------------------------------------------
+//region Licencas Necessaria
     @FXML
     void cadastrarLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
         //Instancia do recurso
         LicencasNecessarias licencasNecessarias = new LicencasNecessarias(entradaNomeLicencaNecessaria.getText(), entrataLinkLicencaNecessaria.getText(), entrataCategoriaLicencaNecessaria.getText(), entrataLevelLicencaNecessaria.getText());
  
-        //Adição no arrayList
-        listLicencasNecessarias.add(licencasNecessarias);
-        tableViewLicencaNecessarias();
-
         //Teste com banco de dados----------------------------------------------------------------------------------
         LicencasNecessariasDAO licencasNecessariasDAO = new LicencasNecessariasDAO();
         licencasNecessariasDAO.addLicensasNecessarias(licencasNecessarias);
 
-        //Salvar no arquivo de texto a cada cadastro
-        manipuladorArquivo.escritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
-
         //Limpar campos do formulario
         limparCamposLicencasNecessarias();
+
+        preencherTableViewLicencaNecessarias();
     }
     @FXML
     void excluirLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
         //Passando o item selecionado para variavel
         LicencasNecessarias licencasNecessariasRemover = tableViewLicencaNecessarias.getSelectionModel().getSelectedItem();
-        //Log
-        System.out.println("Recurso removido" + licencasNecessariasRemover.getTreinamentoNome());
+        
+        LicencasNecessariasDAO licencasNecessariasDAO = new LicencasNecessariasDAO();
+        licencasNecessariasDAO.excluirLicensasNecessarias(licencasNecessariasRemover);
+
         //Remoção do recurso
         tableViewLicencaNecessarias.getItems().remove(licencasNecessariasRemover);
-        //Remoção do ArrayList
-        listLicencasNecessarias.remove(licencasNecessariasRemover);
-        //Atualização da lista no arquivo
-        manipuladorArquivo.escritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
+        
+        limparCamposLicencasNecessarias();
     }
     @FXML
     void salvarLicencaNecessaria(ActionEvent event) throws FileNotFoundException, IOException {
@@ -426,10 +391,21 @@ public class Controller implements Initializable, Serializable{
 
         tableViewLicencaNecessarias.refresh();
 
-        //Salvar no arquivo de texto a cada cadastro
-        manipuladorArquivo.escritaLicencaNecessarias(listLicencasNecessarias, caminhoDataLicencasNecessarias);
-
         limparCamposLicencasNecessarias();
+    }
+
+    @FXML
+    void btnBuscadorlNecessaria(ActionEvent event) {
+        LicencasNecessarias licencasNecessarias = new LicencasNecessarias();
+
+        LicencasNecessariasDAO licencasNecessariasDAO = new LicencasNecessariasDAO();
+        licencasNecessarias = licencasNecessariasDAO.buscaLicensasNecessarias(entradaBuscadorlNecessaria.getText());
+
+        entradaNomeLicencaNecessaria.setText(licencasNecessarias.getTreinamentoNome());
+        entrataLinkLicencaNecessaria.setText(licencasNecessarias.getTreinamentoLink());
+        entrataCategoriaLicencaNecessaria.setText(licencasNecessarias.getTreinamentoCategoria());
+        entrataLevelLicencaNecessaria.setText(licencasNecessarias.getTreinamentoLevel());
+    
     }
     
     /**
@@ -449,51 +425,34 @@ public class Controller implements Initializable, Serializable{
      * Metodo edita o recurso com com as novas informações dos campos inseridas pelo usuario
      */
     public void editarLicencasNecessarias() {
-        //Variavel para armazenar o id do objeto selecionado
-        int idSelecao = 0;
-
         //Passando o item selecionado para variavel
-        LicencasNecessarias licencasNecessarias = tableViewLicencaNecessarias.getSelectionModel().getSelectedItem();    
+        LicencasNecessarias licencasNecessariasEditado = tableViewLicencaNecessarias.getSelectionModel().getSelectedItem();    
 
-        //Procura id do objeto na lista para fazer alteração
-        for (int i = 0; i < listLicencasNecessarias.size(); i++){
-            if (listLicencasNecessarias.get(i).getTreinamentoLink() == licencasNecessarias.getTreinamentoLink()){
-                idSelecao = i;                
-            }
-        } 
-
+        String nomeBuscado = licencasNecessariasEditado.getTreinamentoNome();
+        
         //Coloca o texto dos campos nas variaveis do objeto
-        licencasNecessarias.setTreinamentoNome(entradaNomeLicencaNecessaria.getText());
-        licencasNecessarias.setTreinamentoLink(entrataLinkLicencaNecessaria.getText());
-        licencasNecessarias.setTreinamentoCategoria(entrataCategoriaLicencaNecessaria.getText()); 
-        licencasNecessarias.setTreinamentoLevel(entrataLevelLicencaNecessaria.getText()); 
+        licencasNecessariasEditado.setTreinamentoNome(entradaNomeLicencaNecessaria.getText());
+        licencasNecessariasEditado.setTreinamentoLink(entrataLinkLicencaNecessaria.getText());
+        licencasNecessariasEditado.setTreinamentoCategoria(entrataCategoriaLicencaNecessaria.getText()); 
+        licencasNecessariasEditado.setTreinamentoLevel(entrataLevelLicencaNecessaria.getText()); 
 
-        //Salva o objeto editado no objeto selecionado
-        listLicencasNecessarias.set(idSelecao, licencasNecessarias);
+        LicencasNecessariasDAO licencasNecessariasDAO = new LicencasNecessariasDAO();
+        licencasNecessariasDAO.updateLicensasNecessarias(licencasNecessariasEditado, nomeBuscado);
+            
     }
-    
-    /**
-     * O carregarLicencasNecessariaNoArray pega os objetos do arrayList e carrega no tableView da interface
-     */
-    public void carregarLicencasNecessariaNoArray() {
 
-        listLicencasNecessarias = manipuladorArquivo.leituraLicencaNecessarias(caminhoDataLicencasNecessarias);
-
-        //Associa as variaveis nas colunas do tableView
-        tableViewLicencaNecessarias();
-    }
-    
     /**
      * O tableViewRecursos carrega os valores dos objetos nas colunas da tableView de recursos
      */
-    public void tableViewLicencaNecessarias() {
+    public void preencherTableViewLicencaNecessarias() {
         //Associação das variaveis da classe com as probliedades da tabela 
         tableViewColunaNomeLicencasNecessarias.setCellValueFactory(new PropertyValueFactory<>("treinamentoNome"));          
         tableViewColunaLinkLicencasNecessarias.setCellValueFactory(new PropertyValueFactory<>("treinamentoLink"));          
         tableviewColunaCategoriaLicencasNecessarias.setCellValueFactory(new PropertyValueFactory<>("treinamentoCategoria"));          
         tableviewColunaLevelLicencasNecessarias.setCellValueFactory(new PropertyValueFactory<>("treinamentoLevel"));  
 
-        observablelistLicencasNecessarias = FXCollections.observableArrayList(listLicencasNecessarias);
+        LicencasNecessariasDAO licencasNecessariasDAO = new LicencasNecessariasDAO();
+        observablelistLicencasNecessarias = FXCollections.observableArrayList(licencasNecessariasDAO.getListLicencasNecessarias());
 
         //Coloca os itens na lista
         tableViewLicencaNecessarias.setItems(observablelistLicencasNecessarias); 
@@ -508,67 +467,68 @@ public class Controller implements Initializable, Serializable{
         entrataCategoriaLicencaNecessaria.setText("");
         entrataLevelLicencaNecessaria.setText("");
     }
-//======================Licencas Necessarias====================
-//-------------------------------------------------------------
+//endregion
 
-//======================Projetos===============================
-//-------------------------------------------------------------
+//region Projetos
     @FXML
     void cadastrarProjeto(ActionEvent event) throws FileNotFoundException, IOException {
         //Instancia do recurso
         Projeto projeto = new Projeto(entradaNomeProjeto.getText(), entradaTecnologia.getText(), entradaValor.getText());
-
-        //Adição no arrayList
-        listProjetos.add(projeto);
-        tableViewProjeto();
-
-        //Teste com banco de dados----------------------------------------------------------------------------------
+                
         ProjetoDAO projetoDAO = new ProjetoDAO();
         projetoDAO.addProjeto(projeto);
-
-        //Salvar no arquivo de texto a cada cadastro
-        manipuladorArquivo.escritaProjetos(listProjetos, caminhoDataProjetos);
-
+        
         //Limpar campos do formulario
         limparCamposProjeto();
+
+        //Atualizar a tablewView
+        preencherTableViewProjeto();
     }
     //Metodo exclui o item e salva em um arquivo .txt
     @FXML
     void excluirProjeto(ActionEvent event) throws FileNotFoundException, IOException {
         //Passando o item selecionado para variavel
         Projeto projetoRemover = tableViewProjeto.getSelectionModel().getSelectedItem();
-        //Log
-        System.out.println("Recurso removido" + projetoRemover.setProjetoNome());
+        
+        ProjetoDAO projetoDAO = new ProjetoDAO();
+        projetoDAO.excluirProjeto(projetoRemover);
+
         //Remoção do recurso
         tableViewProjeto.getItems().remove(projetoRemover);
-        //Remoção do ArrayList
-        listProjetos.remove(projetoRemover);
-        //Atualização da lista no arquivo
-        manipuladorArquivo.escritaProjetos(listProjetos, caminhoDataProjetos);
-
+       
         limparCamposProjeto();
     }
-
     //Metodo salva em um arquivo txt ao ser acionado
     @FXML
     void salvarProjeto(ActionEvent event) throws FileNotFoundException, IOException {
         editarProjeto();
-
+               
+        //Atualização do tablewView
         tableViewProjeto.refresh();
 
-        manipuladorArquivo.escritaProjetos(listProjetos, caminhoDataProjetos);
-
         limparCamposProjeto();
-    }
+    }    
+    //Ação do botão para buscar
+    @FXML
+    void btnBuscadorProjeto(ActionEvent event) {
+        Projeto projeto = new Projeto();
 
-    /**
-     * O recursoSelecionado pega o item selecionado pelo usuario e coloca os valores nos campos da interface
-     * @param projeto selecionado pelo usuario na tablewView
-     */
+        //Instanciação do objeto 
+        ProjetoDAO projetoDAO = new ProjetoDAO();
+        //Busca do objeto pelo valor do campo de busca      
+        projeto = projetoDAO.buscaRecurso(entradaBuscadorProjeto.getText());
+
+        //Preenche os campos do form com as informações encontradas
+        entradaNomeProjeto.setText(projeto.getProjetoNome());
+        entradaTecnologia.setText(projeto.getProjetoTecnologia());
+        entradaValor.setText(projeto.getProjetoValor());
+
+    }
+    
     public void projetoSelecionado(Projeto projeto) {
         Projeto projetoEditar = tableViewProjeto.getSelectionModel().getSelectedItem();
 
-        entradaNomeProjeto.setText(projetoEditar.setProjetoNome());
+        entradaNomeProjeto.setText(projetoEditar.getProjetoNome());
         entradaTecnologia.setText(projetoEditar.getProjetoTecnologia());
         entradaValor.setText(projetoEditar.getProjetoValor());
     }
@@ -576,49 +536,35 @@ public class Controller implements Initializable, Serializable{
     /**
      * Metodo edita o recurso com com as novas informações dos campos inseridas pelo usuario
      */
-    public void editarProjeto() {
-        //Variavel para armazenar o id do objeto selecionado
-        int idSelecao = 0;
+    public void editarProjeto() {        
 
         //Passando o item selecionado para variavel
         Projeto projetoEditar = tableViewProjeto.getSelectionModel().getSelectedItem();    
-
-        //Procura id do objeto na lista para fazer alteração
-        for (int i = 0; i < listProjetos.size(); i++){
-            if (listProjetos.get(i).setProjetoNome() == projetoEditar.setProjetoNome()){
-                idSelecao = i;                
-            }
-        } 
+        
+        //Guarda o valor para buscar
+        String nomeBuscado = projetoEditar.getProjetoNome();
 
         //Coloca o texto dos campos nas variaveis do objeto
-        projetoEditar.setProjetoNome(entradaNomeProjeto.getText());
+        projetoEditar.getProjetoNome(entradaNomeProjeto.getText());
         projetoEditar.setProjetoTecnologia(entradaTecnologia.getText());
         projetoEditar.setProjetoValor(entradaValor.getText()); 
 
-        //Salva o objeto editado no objeto selecionado
-        listProjetos.set(idSelecao, projetoEditar);
-    }
+        ProjetoDAO projetoDAO = new ProjetoDAO();
+        projetoDAO.updateProjeto(projetoEditar, nomeBuscado);
 
-    /**
-     * O carregarProjetoNoArray pega os objetos do arrayList e carrega no tableView da interface
-     */
-    public void carregarProjetoNoArray() {
-        listProjetos = manipuladorArquivo.leituraProjetos(caminhoDataProjetos);
-
-        //Associa as variaveis nas colunas do tableView
-        tableViewProjeto();
     }
 
     /**
      * O tableViewRecursos carrega os valores dos objetos nas colunas da tableView de recursos
      */
-    public void tableViewProjeto() {
+    public void preencherTableViewProjeto() {
         //Associação das variaveis da classe com as probliedades da tabela 
         tableViewColunaNomeProjeto.setCellValueFactory(new PropertyValueFactory<>("projetoNome"));          
         tableViewColunaTecnologiaProjeto.setCellValueFactory(new PropertyValueFactory<>("projetoTecnologia"));          
         tableviewColunaValorProjeto.setCellValueFactory(new PropertyValueFactory<>("projetoValor")); 
 
-        observablelistProjetos = FXCollections.observableArrayList(listProjetos);
+        ProjetoDAO projetoDAO = new ProjetoDAO();        
+        observablelistProjetos = FXCollections.observableArrayList(projetoDAO.getListProjeto());
 
         //Coloca os itens na lista
         tableViewProjeto.setItems(observablelistProjetos); 
@@ -632,6 +578,6 @@ public class Controller implements Initializable, Serializable{
         entradaTecnologia.setText("");
         entradaValor.setText("");        
     }
-//======================Projetos===============================
-//-------------------------------------------------------------
+//endregion
+
 }
