@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioLicencasObtidas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bf95ef62-2ab5-4519-ba7a-dacd3026bcbf">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.jrdax"/>
+	<parameter name="emailBuscado" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT lobtida_nome,
+	lobtida_recurso_email,
+	lobtida_conclusao,
+	recurso.recurso_nome
+FROM licencasobtidas
+LEFT JOIN recurso 
+ON  licencasobtidas.lobtida_recurso_email  =  recurso.recurso_email 
+WHERE 
+	 licencasobtidas.lobtida_recurso_email =  $P{emailBuscado}]]>
+	</queryString>
+	<field name="lobtida_nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="lobtida_nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="lobtida_nome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="licencasobtidas"/>
+	</field>
+	<field name="lobtida_recurso_email" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="lobtida_recurso_email"/>
+		<property name="com.jaspersoft.studio.field.label" value="lobtida_recurso_email"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="licencasobtidas"/>
+	</field>
+	<field name="lobtida_conclusao" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="lobtida_conclusao"/>
+		<property name="com.jaspersoft.studio.field.label" value="lobtida_conclusao"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="licencasobtidas"/>
+	</field>
+	<field name="recurso_nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="recurso_nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="recurso_nome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="recurso"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<staticText>
+				<reportElement x="138" y="0" width="278" height="36" uuid="ce1a074d-29a9-4c86-a7db-82a9a8dea60a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bdfaa197-5900-4cf4-b3b2-29850697dc23"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório de licenças concluidas pelo recurso]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="30">
+			<textField>
+				<reportElement x="0" y="0" width="278" height="30" uuid="b7a7e6b6-4f26-452f-aa82-1d2157f69b04"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Nome: "+$F{recurso_nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="278" y="0" width="277" height="30" uuid="4555a893-3ec9-4c8b-9c78-6aec3adbc26f"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Email: "+$F{lobtida_recurso_email}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="278" height="20" uuid="f39779de-211b-45a6-b807-2412e2fc982c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bdfaa197-5900-4cf4-b3b2-29850697dc23"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Licenças concluídas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="278" y="0" width="277" height="20" uuid="c92fd491-9826-4bf6-87eb-9796a93f80ab">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="860f95bd-4717-41eb-9b1c-2f23d0d8bfc4"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data de conclusão]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="278" height="27" uuid="09d309d8-5ff2-4087-a905-ddee17e4ee37">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bdfaa197-5900-4cf4-b3b2-29850697dc23"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{lobtida_nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="278" y="0" width="277" height="27" uuid="bdef80fb-cd03-488d-8063-84219feda854">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="860f95bd-4717-41eb-9b1c-2f23d0d8bfc4"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{lobtida_conclusao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="430" y="0" width="60" height="30" uuid="6a332414-4dfc-40a0-a46c-5d9cb5ce8e05"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="490" y="0" width="65" height="30" uuid="bdca7cdb-8fa0-49f9-b339-54ee7c038f0c"/>
+				<textFieldExpression><![CDATA[" de "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

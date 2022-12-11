@@ -11,6 +11,24 @@
         "lib/javafx-sdk-18.0.2/lib/javafx.swing.jar",
         "lib/javafx-sdk-18.0.2/lib/javafx.web.jar",
         "lib/javafx-sdk-18.0.2/lib/javafx-swt.jar",
-        "lib/postgresql-42.5.0.jar"
+        "lib/postgresql-42.5.0.jar",
+        "lib/jasper_6-17/bcprov-jdk15on-1.64.jar",
+        "lib/jasper_6-17/castor-core-1.4.1.jar",
+        "lib/jasper_6-17/castor-xml-1.4.1.jar",
+        "lib/jasper_6-17/commons-beanutils-1.9.4.jar",
+        "lib/jasper_6-17/commons-collections-3.2.2.jar",
+        "lib/jasper_6-17/commons-collections4-4.2.jar",
+        "lib/jasper_6-17/commons-digester-2.1.jar",
+        "lib/jasper_6-17/commons-lang3-3.4.jar",
+        "lib/jasper_6-17/commons-logging-1.1.1.jar",
+        "lib/jasper_6-17/ecj-3.21.0.jar",
+        "lib/jasper_6-17/itext-2.1.7.js8.jar",
+        "lib/jasper_6-17/jackson-annotations-2.12.2.jar",
+        "lib/jasper_6-17/jackson-core-2.12.2.jar",
+        "lib/jasper_6-17/jackson-databind-2.12.2.jar",
+        "lib/jasper_6-17/jasperreports-6.17.0.jar",
+        "lib/jasper_6-17/javax.inject-1.jar",
+        "lib/jasper_6-17/jcommon-1.0.23.jar",
+        "lib/jasper_6-17/jfreechart-1.0.19.jar"
     ]
 }

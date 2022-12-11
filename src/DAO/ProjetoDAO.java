@@ -30,7 +30,7 @@ public class ProjetoDAO {
             //Passando os valores do objeto projeto para os campos do banco de dados
             preparedStatement.setString(1, projeto.getProjetoNome());
             preparedStatement.setString(2, projeto.getProjetoTecnologia());
-            preparedStatement.setString(3, projeto.getProjetoValor());
+            preparedStatement.setFloat(3, projeto.getProjetoValor());
 
             //Execução da entrada de informações no banco de dados
             preparedStatement.execute();
@@ -54,7 +54,7 @@ public class ProjetoDAO {
 
             preparedStatement.setString(1, projeto.getProjetoNome());
             preparedStatement.setString(2, projeto.getProjetoTecnologia());
-            preparedStatement.setString(3, projeto.getProjetoValor());
+            preparedStatement.setFloat(3, projeto.getProjetoValor());
 
             preparedStatement.setString(4, chaveBusca);
 
@@ -104,7 +104,7 @@ public class ProjetoDAO {
                 Projeto projeto = new Projeto();
                 projeto.getProjetoNome(resultSet.getString("projeto_nome"));
                 projeto.setProjetoTecnologia(resultSet.getString("projeto_tecnologia"));
-                projeto.setProjetoValor(resultSet.getString("projeto_valor"));
+                projeto.setProjetoValor(resultSet.getFloat("projeto_valor"));
                 projetos.add(projeto);
             }
             preparedStatement.close();
@@ -128,7 +128,7 @@ public class ProjetoDAO {
             while (resultSet.next()) {
                 projetoResult.getProjetoNome(resultSet.getString("projeto_nome"));
                 projetoResult.setProjetoTecnologia(resultSet.getString("projeto_tecnologia"));
-                projetoResult.setProjetoValor(resultSet.getString("projeto_valor"));
+                projetoResult.setProjetoValor(resultSet.getFloat("projeto_valor"));
             }
 
             preparedStatement.close();
