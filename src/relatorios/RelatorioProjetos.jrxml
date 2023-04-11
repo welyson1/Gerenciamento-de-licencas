@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioProjetos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e1355bc2-2616-4c8d-aebe-905a8c242d7d">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.jrdax"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT projeto_tecnologia, 
+COUNT(DISTINCT projeto_nome) projetos,
+SUM (projeto_valor) soma_tec
+FROM projeto 
+GROUP BY projeto_tecnologia]]>
+	</queryString>
+	<field name="projeto_tecnologia" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="projeto_tecnologia"/>
+		<property name="com.jaspersoft.studio.field.label" value="projeto_tecnologia"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="projeto"/>
+	</field>
+	<field name="projetos" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="projetos"/>
+		<property name="com.jaspersoft.studio.field.label" value="projetos"/>
+	</field>
+	<field name="soma_tec" class="java.lang.Float">
+		<property name="com.jaspersoft.studio.field.name" value="soma_tec"/>
+		<property name="com.jaspersoft.studio.field.label" value="soma_tec"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="55" splitType="Stretch">
+			<staticText>
+				<reportElement x="259" y="0" width="285" height="55" uuid="bf696745-b449-46bb-a794-58b5e70a8970"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[Análises dos projetos]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20">
+			<staticText>
+				<reportElement x="0" y="0" width="268" height="20" backcolor="#E8E8E8" uuid="ae66f5fa-6464-4b66-94fc-d876c72ac43c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a99d8611-9ec4-4ae0-8cf0-35bcf3eaf9e1"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tecnologias]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="0" width="267" height="20" backcolor="#E8E8E8" uuid="5d876e31-f367-450a-83ee-b932a2a6ef92">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e94cdff8-75be-4451-8e1a-f5711a0b2d0e"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QTD de projetos por tecnologia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="535" y="0" width="267" height="20" backcolor="#E8E8E8" uuid="f5b3e005-6a68-43b7-8651-ec10986c4e22">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="71594a52-1f8c-4521-b019-da616db6ef33"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor do projeto somados]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="268" height="20" uuid="08109ddf-3c14-47d4-ad05-f247c7de4b38">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a99d8611-9ec4-4ae0-8cf0-35bcf3eaf9e1"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{projeto_tecnologia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="268" y="0" width="267" height="20" uuid="dd024540-fa57-4695-ab35-402d8e74a1bc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e94cdff8-75be-4451-8e1a-f5711a0b2d0e"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{projetos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="535" y="0" width="267" height="20" uuid="ccf133d9-84c5-4002-8e87-6477527fd54b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="71594a52-1f8c-4521-b019-da616db6ef33"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["R$ "+$F{soma_tec}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="269">
+			<barChart>
+				<chart isShowLegend="false" evaluationTime="Report">
+					<reportElement x="0" y="0" width="380" height="269" uuid="20b40ff7-18a2-4e9b-8329-14f95d79099a"/>
+					<chartTitle>
+						<font isBold="true"/>
+						<titleExpression><![CDATA["Somatoria do valor dos projetos por tecnologia"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset resetType="Report"/>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{projeto_tecnologia}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{projeto_tecnologia}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{soma_tec}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot isShowLabels="true">
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" verticalTickLabels="false" axisLineColor="#000000"/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<barChart>
+				<chart isShowLegend="false" evaluationTime="Report">
+					<reportElement x="380" y="0" width="420" height="269" uuid="7c057f26-d6ed-4c40-94d2-e77c8d3d284e"/>
+					<chartTitle>
+						<font isBold="true"/>
+						<titleExpression><![CDATA["QTD de projetos por Tecnologia"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset resetType="Report"/>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{projetos}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{projeto_tecnologia}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{projetos}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot isShowLabels="true">
+					<plot orientation="Horizontal"/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</summary>
+</jasperReport>

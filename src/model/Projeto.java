@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class Projeto implements Serializable{
     String projetoNome = null;
     String projetoTecnologia = null;
-    String projetoValor = null;
+    float projetoValor = 0;
 
     public Projeto() {
         
     }
 
-    public Projeto(String projetoNome, String projetoTecnologia, String projetoValor) {
+    public Projeto(String projetoNome, String projetoTecnologia, float projetoValor) {
         this.projetoNome = projetoNome;
         this.projetoTecnologia = projetoTecnologia;
         this.projetoValor = projetoValor;
@@ -29,10 +29,10 @@ public class Projeto implements Serializable{
     public void setProjetoTecnologia(String projetoTecnologia) {
         this.projetoTecnologia = projetoTecnologia;
     }
-    public String getProjetoValor() {
+    public float getProjetoValor() {
         return projetoValor;
     }
-    public void setProjetoValor(String projetoValor) {
+    public void setProjetoValor(float projetoValor) {
         this.projetoValor = projetoValor;
     }
 }

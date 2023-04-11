@@ -9,7 +9,7 @@ create table projeto(
 	id serial primary key,
 	projeto_nome varchar(100) not null,
 	projeto_tecnologia varchar(100) not null,
-	projeto_valor varchar(50) default '0'
+	projeto_valor REAL not null
 );
 
 create table licencasNecessarias(
