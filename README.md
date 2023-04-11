@@ -20,9 +20,9 @@ O propósito do software é possibilitar o cadastro de certificações completad
 2. Abra no vscode
 3. Instale as bibliotecas
 4. Crie o banco de dados postgres
-5. Crie as tabelas com query abaixo
+5. Crie as tabelas com o código SQL abaixo
 ```SQL
-  create table recurso(
+create table recurso(
 	id serial primary key,
 	recurso_nome varchar(100) not null,
 	recurso_email varchar(100) not null,
