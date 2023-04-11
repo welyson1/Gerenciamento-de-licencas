@@ -3,6 +3,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import DAO.LicencasNecessariasDAO;
@@ -93,6 +95,9 @@ public class Controller implements Initializable, Serializable{
     private TextField entradaBuscadorlNecessaria;
     @FXML
     private TextField entradaBuscadorlObtidas;
+
+    @FXML
+    private TextField parametroRelatorioLobtidas;
  //endregion
 
 //region Declaração do observador
@@ -130,6 +135,14 @@ public class Controller implements Initializable, Serializable{
     }
 
 //region Recurso
+    //Botão que chama a exibição do relatorio para listar os recursos cadastrados no bando de dados
+    @FXML
+    void relatorioListarRecursos(ActionEvent event) {
+        ControllerRelatorios relatorioSimples = new ControllerRelatorios();
+        //Passa o nome do arquivo jasper relatório para o método
+        relatorioSimples.exibirRelatorioSimples("RelatorioRecursos");
+    } 
+    //Botão para cadastrar um novo recurso no banco de dados  
     @FXML
     void cadastrarRecurso(ActionEvent event) throws FileNotFoundException, IOException {
         //Instancia do recurso
@@ -245,6 +258,28 @@ public class Controller implements Initializable, Serializable{
 //endregion
 
 //region Licenças Obtidas
+    //Botão para recuperar as licenças obtidas de um recurso
+    @FXML
+    void relatorioLicencasObtidas(ActionEvent event) {
+        ControllerRelatorios controllerRelatorios = new ControllerRelatorios();
+        //Passa o nome do arquivo jasper relatório para o método
+        controllerRelatorios.exibirRelatorioParametros("RelatorioLicencasObtidas", construtorParametrosLicencasObtidas());
+    }
+    /**
+     * O metodo constroi os parametros para passar para o relatório
+     * @return parametro contruído para importar no relatório do Jasper
+     */
+    private Map construtorParametrosLicencasObtidas() {
+        Map params = new HashMap();
+        try {
+            params.put("emailBuscado", parametroRelatorioLobtidas.getText());
+            
+        } catch (Exception e) {
+            return null;
+        } 
+        return params;      
+    }
+    //Botão para cadastrar uma nova licença oibtida
     @FXML
     void cadastrorLicencaObtida(ActionEvent event) throws FileNotFoundException, IOException {
         //Instancia do recurso
@@ -470,10 +505,18 @@ public class Controller implements Initializable, Serializable{
 //endregion
 
 //region Projetos
+    //Botão para recuperar o relatório dos projetos
+    @FXML
+    void relatorioAnalisesDosProjetos(ActionEvent event) {
+        ControllerRelatorios relatorioSimples = new ControllerRelatorios();
+        //Passa o nome do arquivo jasper relatório para o método
+        relatorioSimples.exibirRelatorioSimples("RelatorioProjetos");
+    }
+    //Botão para cadastrar um novo projeto
     @FXML
     void cadastrarProjeto(ActionEvent event) throws FileNotFoundException, IOException {
         //Instancia do recurso
-        Projeto projeto = new Projeto(entradaNomeProjeto.getText(), entradaTecnologia.getText(), entradaValor.getText());
+        Projeto projeto = new Projeto(entradaNomeProjeto.getText(), entradaTecnologia.getText(), Float.parseFloat(entradaValor.getText()));
                 
         ProjetoDAO projetoDAO = new ProjetoDAO();
         projetoDAO.addProjeto(projeto);
@@ -521,7 +564,7 @@ public class Controller implements Initializable, Serializable{
         //Preenche os campos do form com as informações encontradas
         entradaNomeProjeto.setText(projeto.getProjetoNome());
         entradaTecnologia.setText(projeto.getProjetoTecnologia());
-        entradaValor.setText(projeto.getProjetoValor());
+        entradaValor.setText(String.valueOf(projeto.getProjetoValor()));
 
     }
     
@@ -530,7 +573,7 @@ public class Controller implements Initializable, Serializable{
 
         entradaNomeProjeto.setText(projetoEditar.getProjetoNome());
         entradaTecnologia.setText(projetoEditar.getProjetoTecnologia());
-        entradaValor.setText(projetoEditar.getProjetoValor());
+        entradaValor.setText(String.valueOf(projeto.getProjetoValor()));
     }
 
     /**
@@ -547,7 +590,7 @@ public class Controller implements Initializable, Serializable{
         //Coloca o texto dos campos nas variaveis do objeto
         projetoEditar.getProjetoNome(entradaNomeProjeto.getText());
         projetoEditar.setProjetoTecnologia(entradaTecnologia.getText());
-        projetoEditar.setProjetoValor(entradaValor.getText()); 
+        projetoEditar.setProjetoValor(Float.parseFloat(entradaValor.getText())); 
 
         ProjetoDAO projetoDAO = new ProjetoDAO();
         projetoDAO.updateProjeto(projetoEditar, nomeBuscado);

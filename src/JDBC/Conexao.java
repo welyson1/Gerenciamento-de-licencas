@@ -14,7 +14,7 @@ public class Conexao {
             //Variaveis com informações do banco de dados
             String url = "jdbc:postgresql://localhost:5432/";
             String usuario = "postgres";
-            String senha = "colocar-senha-aqui";
+            String senha = "senha aqui";
 
             //Log de conexão
             System.out.println("Conexão funcionando");
